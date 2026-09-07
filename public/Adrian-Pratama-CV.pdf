@@ -1,0 +1,46 @@
+%PDF-1.4
+1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj
+2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj
+3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj
+4 0 obj << /Length 480 >> stream
+BT
+/F1 20 Tf
+50 720 Td
+(ADRIAN PRATAMA - SENIOR UI/UX DESIGNER) Tj
+/F1 11 Tf
+0 -30 Td
+(Email: adrian.pratama@studiofolio.id | Web: studiofolio.id) Tj
+0 -35 Td
+(CORE PROFILE) Tj
+0 -18 Td
+(Senior Product Designer with 7+ years of experience engineering high-density) Tj
+0 -15 Td
+(enterprise interfaces, design token infrastructure, and algorithmic trading consoles.) Tj
+0 -35 Td
+(WORK EXPERIENCE) Tj
+0 -18 Td
+(2023 - Present: Principal Product Designer, Kinetik Systems) Tj
+0 -18 Td
+(2021 - 2023: Senior UI/UX Designer, Form & Signal Studio) Tj
+0 -18 Td
+(2019 - 2021: Product Designer, VectorCraft Labs) Tj
+0 -35 Td
+(CORE TOOLING & STACK) Tj
+0 -18 Td
+(Figma, Tokens Studio, Framer, ProtoPie, Tailwind CSS, Design Token Pipelines) Tj
+ET
+endstream
+endobj
+5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj
+xref
+0 6
+0000000009 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000227 00000 n 
+0000000760 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+829
+%%EOF
