@@ -27,7 +27,6 @@ export default async function ProjectsPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#121212] font-poppins antialiased selection:bg-[#0D99FF] selection:text-white pb-14">
-
       <main className="mx-auto max-w-6xl px-6 pt-10 sm:px-10 sm:pt-14 md:px-14">
         {/* ========================================================== */}
         {/* 2. EDITORIAL SECTION HEADER (MATCHING HOMEWORKS SECTION)   */}
@@ -43,7 +42,8 @@ export default async function ProjectsPage() {
                 Selected Works
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#5C5A55]">
-                In-depth case studies covering financial software consoles, spatial node topologies, design token pipelines, and mission-critical interactive architectures.
+                In-depth case studies covering financial software consoles, spatial node topologies,
+                design token pipelines, and mission-critical interactive architectures.
               </p>
             </div>
 
@@ -65,8 +65,8 @@ export default async function ProjectsPage() {
               const rawImages = Array.isArray(project.image)
                 ? project.image
                 : project.image
-                ? [project.image]
-                : []
+                  ? [project.image]
+                  : []
 
               const firstMedia = rawImages[0]
               const imageUrl =
@@ -114,7 +114,8 @@ export default async function ProjectsPage() {
 
                       {/* Brief Info Tag */}
                       <p className="text-sm leading-relaxed text-[#55524C]">
-                        Explore the full case study breakdown, architectural design decisions, and production artifacts shipped for this project scope.
+                        Explore the full case study breakdown, architectural design decisions, and
+                        production artifacts shipped for this project scope.
                       </p>
 
                       {/* Action Buttons */}
@@ -129,7 +130,11 @@ export default async function ProjectsPage() {
 
                         {project.link && (
                           <a
-                            href={project.link.startsWith('http') ? project.link : `https://${project.link}`}
+                            href={
+                              project.link.startsWith('http')
+                                ? project.link
+                                : `https://${project.link}`
+                            }
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 rounded-full border border-[#D5D0C5] bg-white px-4 py-2 text-xs font-medium text-[#111111] shadow-2xs transition-all hover:border-[#0D99FF] hover:text-[#0D99FF]"
@@ -200,7 +205,8 @@ export default async function ProjectsPage() {
             </div>
             <h3 className="mt-4 text-lg font-bold text-[#111111]">No Projects Published Yet</h3>
             <p className="mt-1 text-sm text-[#66635C] max-w-sm mx-auto">
-              Create and publish projects in Payload CMS Admin under the Projects collection to display them here.
+              Create and publish projects in Payload CMS Admin under the Projects collection to
+              display them here.
             </p>
             <div className="mt-6">
               <Link

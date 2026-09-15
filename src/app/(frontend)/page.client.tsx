@@ -56,13 +56,7 @@ type Props = {
   educations: EducationItem[]
 }
 
-export default function PortfolioClient({
-  hero,
-  projects,
-  tools,
-  experiences,
-  educations,
-}: Props) {
+export default function PortfolioClient({ hero, projects, tools, experiences, educations }: Props) {
   const [activeProject, setActiveProject] = useState<ProjectItem>(projects[0] || null)
   const [selectedModalProject, setSelectedModalProject] = useState<ProjectItem | null>(null)
   const [copiedEmail, setCopiedEmail] = useState(false)
@@ -93,7 +87,8 @@ export default function PortfolioClient({
 
   const headline = hero?.headline || 'Adrian Pratama'
   const subheadline =
-    hero?.subheadline || 'Directing high-density interaction models • Enterprise Telemetry • Fintech'
+    hero?.subheadline ||
+    'Directing high-density interaction models • Enterprise Telemetry • Fintech'
   const heroDescription =
     hero?.description ||
     'Engineering intuitive software interfaces, spatial design token systems, and mission-critical digital products with mathematical precision.'
@@ -121,10 +116,18 @@ export default function PortfolioClient({
           <div className="pointer-events-none absolute inset-0 mx-auto max-w-6xl">
             <div className="absolute left-0 top-0 h-full w-px bg-[#DCD6CA]/80" />
             <div className="absolute right-0 top-0 h-full w-px bg-[#DCD6CA]/80" />
-            <span className="absolute left-[-5px] top-4 font-mono text-[10px] text-[#A8A398]">+</span>
-            <span className="absolute right-[-5px] top-4 font-mono text-[10px] text-[#A8A398]">+</span>
-            <span className="absolute left-[-5px] bottom-4 font-mono text-[10px] text-[#A8A398]">+</span>
-            <span className="absolute right-[-5px] bottom-4 font-mono text-[10px] text-[#A8A398]">+</span>
+            <span className="absolute left-[-5px] top-4 font-mono text-[10px] text-[#A8A398]">
+              +
+            </span>
+            <span className="absolute right-[-5px] top-4 font-mono text-[10px] text-[#A8A398]">
+              +
+            </span>
+            <span className="absolute left-[-5px] bottom-4 font-mono text-[10px] text-[#A8A398]">
+              +
+            </span>
+            <span className="absolute right-[-5px] bottom-4 font-mono text-[10px] text-[#A8A398]">
+              +
+            </span>
           </div>
 
           <div className="mx-auto w-full max-w-6xl h-full flex flex-col justify-between relative z-10">
@@ -135,10 +138,22 @@ export default function PortfolioClient({
                 {/* FIGMA SELECTION COMPONENT BOX AROUND HEADLINE */}
                 <div className="relative rounded-2xl border-1 border-[#0D99FF]/70 bg-white/80 p-5 sm:p-7 backdrop-blur-md shadow-[0_8px_30px_rgba(13,153,255,0.08)]">
                   {/* Multi-Color Corner Resize Square Handles */}
-                  <span className="absolute -left-1.5 -top-1.5 h-3 w-3 border-2 border-[#0D99FF] bg-white shadow-xs" title="Node: Cyan" />
-                  <span className="absolute -right-1.5 -top-1.5 h-3 w-3 border-2 border-[#A259FF] bg-white shadow-xs" title="Node: Purple" />
-                  <span className="absolute -bottom-1.5 -left-1.5 h-3 w-3 border-2 border-[#0ACF83] bg-white shadow-xs" title="Node: Green" />
-                  <span className="absolute -bottom-1.5 -right-1.5 h-3 w-3 border-2 border-[#FF7262] bg-white shadow-xs" title="Node: Coral" />
+                  <span
+                    className="absolute -left-1.5 -top-1.5 h-3 w-3 border-2 border-[#0D99FF] bg-white shadow-xs"
+                    title="Node: Cyan"
+                  />
+                  <span
+                    className="absolute -right-1.5 -top-1.5 h-3 w-3 border-2 border-[#A259FF] bg-white shadow-xs"
+                    title="Node: Purple"
+                  />
+                  <span
+                    className="absolute -bottom-1.5 -left-1.5 h-3 w-3 border-2 border-[#0ACF83] bg-white shadow-xs"
+                    title="Node: Green"
+                  />
+                  <span
+                    className="absolute -bottom-1.5 -right-1.5 h-3 w-3 border-2 border-[#FF7262] bg-white shadow-xs"
+                    title="Node: Coral"
+                  />
 
                   {/* INFORMATIVE DATA COMPONENT LAYER CHIP */}
                   <div className="absolute -top-3 left-4 flex items-center gap-1.5 rounded-md bg-[#0D99FF] px-2.5 py-0.5 font-mono text-[10px] font-semibold text-white shadow-xs">
@@ -180,7 +195,15 @@ export default function PortfolioClient({
                     download="Adrian-Pratama-CV.pdf"
                     className="inline-flex min-h-[46px] items-center gap-2 rounded-full border border-[#D5D0C5] bg-white px-6 py-2.5 text-xs sm:text-sm font-medium text-[#111111] shadow-2xs transition-all hover:border-[#0D99FF] hover:text-[#0D99FF] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D99FF]"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                       <polyline points="7 10 12 15 17 10" />
                       <line x1="12" y1="15" x2="12" y2="3" />
@@ -195,7 +218,11 @@ export default function PortfolioClient({
                 <div className="relative w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[350px]">
                   {/* FIGMA LIVE COLLABORATIVE CURSOR 1 (Purple) */}
                   <div className="absolute -top-3.5 -left-3 z-30 flex items-center gap-1 animate-pulse">
-                    <svg className="w-4 h-4 text-[#A259FF] drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                      className="w-4 h-4 text-[#A259FF] drop-shadow-sm"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <path d="M4 2l16 11.5-6.5 1.5 4 7.5-2.5 1.5-4-7.5-5 5V2z" />
                     </svg>
                     <span className="rounded-full bg-[#A259FF] px-2.5 py-0.5 font-mono text-[9px] font-semibold text-white shadow-md">
@@ -205,7 +232,11 @@ export default function PortfolioClient({
 
                   {/* FIGMA DEV MODE CURSOR 2 (Green) */}
                   <div className="absolute -bottom-3 -right-2 z-30 flex items-center gap-1">
-                    <svg className="w-4 h-4 text-[#0ACF83] drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
+                    <svg
+                      className="w-4 h-4 text-[#0ACF83] drop-shadow-sm"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
                       <path d="M4 2l16 11.5-6.5 1.5 4 7.5-2.5 1.5-4-7.5-5 5V2z" />
                     </svg>
                     <span className="rounded-full bg-[#0ACF83] px-2.5 py-0.5 font-mono text-[9px] font-semibold text-white shadow-md">
@@ -296,7 +327,8 @@ export default function PortfolioClient({
                     Selected Works
                   </h2>
                   <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#5C5A55]">
-                    In-depth case studies covering financial trading consoles, spatial cloud topology, design token infrastructure, and high-contrast healthcare interfaces.
+                    In-depth case studies covering financial trading consoles, spatial cloud
+                    topology, design token infrastructure, and high-contrast healthcare interfaces.
                   </p>
                 </div>
 
@@ -364,9 +396,7 @@ export default function PortfolioClient({
 
                         {/* Subtitle */}
                         {project.subtitle && (
-                          <p className="text-xs font-medium text-[#7A7873]">
-                            {project.subtitle}
-                          </p>
+                          <p className="text-xs font-medium text-[#7A7873]">{project.subtitle}</p>
                         )}
 
                         {/* Short Description */}
@@ -520,12 +550,7 @@ export default function PortfolioClient({
                     >
                       {typeof tool.icon === 'string' ? (
                         <div className="relative h-6 w-6">
-                          <Image
-                            src={tool.icon}
-                            alt={tool.name}
-                            fill
-                            className="object-contain"
-                          />
+                          <Image src={tool.icon} alt={tool.name} fill className="object-contain" />
                         </div>
                       ) : tool.icon ? (
                         tool.icon
@@ -573,16 +598,12 @@ export default function PortfolioClient({
                       <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-[#F2EFE9] bg-[#0D99FF] shadow-xs" />
 
                       <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <h3 className="text-base font-bold text-[#121212]">
-                          {exp.role}
-                        </h3>
+                        <h3 className="text-base font-bold text-[#121212]">{exp.role}</h3>
                         <span className="font-mono text-xs font-semibold text-[#0D99FF]">
                           {exp.period}
                         </span>
                       </div>
-                      <p className="text-xs font-medium text-[#6E6D68]">
-                        {exp.company}
-                      </p>
+                      <p className="text-xs font-medium text-[#6E6D68]">{exp.company}</p>
                       <p className="mt-2 text-sm leading-relaxed text-[#5C5A55]">
                         {exp.description}
                       </p>
@@ -610,9 +631,7 @@ export default function PortfolioClient({
                         <span className="font-mono text-xs font-semibold text-[#0D99FF]">
                           {edu.year}
                         </span>
-                        <h4 className="mt-0.5 text-sm font-bold text-[#121212]">
-                          {edu.title}
-                        </h4>
+                        <h4 className="mt-0.5 text-sm font-bold text-[#121212]">{edu.title}</h4>
                         <p className="text-xs text-[#6E6D68]">{edu.institution}</p>
                       </div>
                     ))}
@@ -653,8 +672,8 @@ export default function PortfolioClient({
               </h2>
 
               <p className="mt-4 max-w-lg text-base leading-relaxed text-[#5C5A55]">
-                Currently open for UI/UX product architecture, design systems, and select consulting contracts.
-                Direct inquiries typically answered within 24 hours.
+                Currently open for UI/UX product architecture, design systems, and select consulting
+                contracts. Direct inquiries typically answered within 24 hours.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -696,7 +715,8 @@ export default function PortfolioClient({
             <div className="flex items-start justify-between border-b border-[#E8E6DF] pb-4">
               <div>
                 <span className="font-mono text-xs font-bold text-[#0D99FF]">
-                  {selectedModalProject.category} {selectedModalProject.year ? `• ${selectedModalProject.year}` : ''}
+                  {selectedModalProject.category}{' '}
+                  {selectedModalProject.year ? `• ${selectedModalProject.year}` : ''}
                 </span>
                 <h3 id="modal-title" className="mt-1 text-2xl font-bold text-[#121212] sm:text-3xl">
                   {selectedModalProject.title}
