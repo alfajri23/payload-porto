@@ -13,225 +13,6 @@ type Props = {
   tools?: Tool[]
 }
 
-// Specialized Tools: Curated with authentic SVG icons & category pills
-const TOOL_CATEGORIES = [
-  {
-    category: 'Runtimes & Systems',
-    tools: [
-      {
-        name: 'Go (Golang)',
-        color: '#00ADD8',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M1.98 12.04c.1-1.39.82-2.73 1.94-3.56 1.34-.99 3.09-1.28 4.71-.97.23.04.45.1.66.19-.13.37-.28.73-.44 1.09-.59-.2-1.22-.3-1.84-.27-1.42.06-2.82.91-3.32 2.24-.56 1.5.07 3.32 1.44 4.14 1.25.75 2.87.67 4.11-.14.28-.18.53-.4.74-.65h-3.41v-1.21h4.74c.05.58.01 1.18-.17 1.74-.42 1.32-1.45 2.39-2.77 2.87-1.57.57-3.38.38-4.78-.54-1.07-.7-1.8-1.8-1.95-3.04z"
-              fill="#00ADD8"
-            />
-            <path
-              d="M17.48 8.16c1.65-.25 3.37.29 4.54 1.48 1.29 1.31 1.78 3.28 1.25 5.04-.54 1.8-2.07 3.19-3.92 3.53-1.81.33-3.7-.42-4.83-1.92-1.09-1.45-1.27-3.49-.44-5.11.75-1.46 2.05-2.58 3.4-3.02zm-.23 1.23c-1.12.3-2.12 1.14-2.54 2.24-.49 1.29-.16 2.86.78 3.84.87.91 2.26 1.25 3.44.82 1.16-.42 1.99-1.53 2.1-2.77.12-1.38-.63-2.78-1.86-3.41-.61-.31-1.29-.44-1.92-.42z"
-              fill="#00ADD8"
-            />
-          </svg>
-        ),
-      },
-      {
-        name: 'Rust',
-        color: '#111827',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="9" stroke="#111827" strokeWidth="2" />
-            <path
-              d="M9 15V9h3a2 2 0 012 2v0a2 2 0 01-2 2H9m3 0l2.5 2.5"
-              stroke="#111827"
-              strokeWidth="1.8"
-            />
-          </svg>
-        ),
-      },
-      {
-        name: 'TypeScript',
-        color: '#3178C6',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <rect width="24" height="24" rx="4" fill="#3178C6" />
-            <path
-              d="M12.5 13.5v1.8c-.8-.4-1.6-.6-2.4-.6-1.1 0-1.7.4-1.7 1.1 0 .6.4 1 1.7 1.4 1.9.6 2.9 1.4 2.9 2.9 0 1.9-1.5 3-3.7 3-1.2 0-2.3-.3-3.3-.8v-1.9c.9.6 2 1 3.1 1 1.2 0 1.8-.5 1.8-1.1 0-.7-.5-1.1-1.8-1.5-1.9-.6-2.8-1.5-2.8-2.9 0-1.8 1.4-2.9 3.5-2.9 1 0 2 .2 2.7.5zm7.3 1.8v7.8h-2.1v-7.8h-2.8v-1.8h7.7v1.8h-2.8z"
-              fill="#ffffff"
-            />
-          </svg>
-        ),
-      },
-      {
-        name: 'Next.js & React',
-        color: '#000000',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" fill="#000000" />
-            <path
-              d="M15.5 8.5v7m-7-7v7l8-9"
-              stroke="#ffffff"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-            />
-          </svg>
-        ),
-      },
-    ],
-  },
-  {
-    category: 'Storage & Streaming',
-    tools: [
-      {
-        name: 'PostgreSQL',
-        color: '#336791',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4 21l3.5-.94C9.02 20.62 10.47 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"
-              fill="#336791"
-            />
-            <circle cx="12" cy="12" r="3" fill="#ffffff" />
-          </svg>
-        ),
-      },
-      {
-        name: 'Redis',
-        color: '#DC382D',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-              stroke="#DC382D"
-              strokeWidth="2"
-            />
-          </svg>
-        ),
-      },
-      {
-        name: 'Apache Kafka',
-        color: '#231F20',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="3" fill="#111827" />
-            <circle cx="12" cy="5" r="2" fill="#111827" />
-            <circle cx="12" cy="19" r="2" fill="#111827" />
-            <circle cx="5.5" cy="8.5" r="2" fill="#111827" />
-            <circle cx="18.5" cy="8.5" r="2" fill="#111827" />
-          </svg>
-        ),
-      },
-      {
-        name: 'ClickHouse',
-        color: '#F9A825',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="6" width="3" height="12" fill="#F9A825" rx="1" />
-            <rect x="8" y="4" width="3" height="16" fill="#F9A825" rx="1" />
-            <rect x="13" y="8" width="3" height="8" fill="#F9A825" rx="1" />
-            <rect x="18" y="5" width="3" height="14" fill="#F9A825" rx="1" />
-          </svg>
-        ),
-      },
-    ],
-  },
-  {
-    category: 'Cloud & Infrastructure',
-    tools: [
-      {
-        name: 'Kubernetes',
-        color: '#326CE5',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 2l8.5 5v10L12 22 3.5 17V7L12 2z"
-              stroke="#326CE5"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <circle cx="12" cy="12" r="3" fill="#326CE5" />
-          </svg>
-        ),
-      },
-      {
-        name: 'Docker',
-        color: '#2496ED',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M22 13c-.5-1.5-2-2-2-2s-.5 1-1.5 1.5c-1 .5-2 0-2 0s-.5 1-2 1h-8c-.5-2 1-3 1-3H5s-1 1-1 3c-2 .5-3 2-3 4 0 3 3 5 8 5 6 0 9-3 10-6 .5 0 2-.5 2-2z"
-              fill="#2496ED"
-            />
-          </svg>
-        ),
-      },
-      {
-        name: 'Terraform',
-        color: '#844FBA',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <polygon points="2 3 9 7 9 15 2 11" fill="#844FBA" />
-            <polygon points="10 7.5 17 11.5 17 19.5 10 15.5" fill="#844FBA" />
-            <polygon points="17.5 3 24.5 7 24.5 15 17.5 11" fill="#844FBA" opacity="0.8" />
-          </svg>
-        ),
-      },
-      {
-        name: 'gRPC / Protobuf',
-        color: '#244c5a',
-        icon: (
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none">
-            <polygon points="12 2 2 7 12 12 22 7 12 2" stroke="#244c5a" strokeWidth="2" />
-            <polyline points="2 17 12 22 22 17" stroke="#244c5a" strokeWidth="2" />
-          </svg>
-        ),
-      },
-    ],
-  },
-]
-
-const CAREER = [
-  {
-    period: '2023 - Present',
-    role: 'Staff Infrastructure & Backend Engineer',
-    company: 'Apex Cloud Systems • Singapore & Remote',
-    summary:
-      'Leading the platform infrastructure team. Architected the edge API gateway handling 24M+ daily requests and spearheaded database sharding that decreased p99 latency by 45%.',
-  },
-  {
-    period: '2021 - 2023',
-    role: 'Senior Backend Engineer',
-    company: 'Nexus FinTech • Jakarta & Singapore',
-    summary:
-      'Engineered an idempotent payment processing engine handling $40M+ monthly throughput. Designed failover mechanics with zero duplicate ledger records during network partition events.',
-  },
-  {
-    period: '2019 - 2021',
-    role: 'Fullstack Software Engineer',
-    company: 'Algospatial Telemetry • Bandung',
-    summary:
-      'Built high-concurrency Node.js and Go microservices with Next.js dashboards. Maintained automated CI/CD deployment pipelines across multi-region Kubernetes clusters.',
-  },
-]
-
-const EDUCATION = [
-  {
-    year: '2015 - 2019',
-    title: 'B.Sc. in Computer Science',
-    institution: 'Institut Teknologi Bandung (ITB)',
-  },
-  {
-    year: '2022',
-    title: 'Certified Kubernetes Administrator (CKA)',
-    institution: 'Cloud Native Computing Foundation (CNCF)',
-  },
-  {
-    year: '2021',
-    title: 'AWS Certified Solutions Architect Professional',
-    institution: 'Amazon Web Services (AWS)',
-  },
-]
-
 const COMPANIES = [
   { url: 'https://www.linkedin.com', name: 'Linkedin', style: 'font-black tracking-tight' },
   { url: 'https://www.github.com', name: 'Github', style: 'font-black tracking-widest' },
@@ -621,14 +402,16 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                       className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-slate-800 shadow-2xs hover:border-slate-900 hover:shadow-xs transition-all cursor-default group"
                     >
                       <span className="shrink-0 transition-transform group-hover:scale-110">
-                        <ImageMedia
-                          resource={
-                            tool.icon ||
-                            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85'
-                          }
-                          alt={tool.name}
-                          imgClassName="w-8 h-8 object-contain rounded-full shadow-xs"
-                        />
+                        {tool.icon && (
+                          <ImageMedia
+                            resource={
+                              tool.icon ||
+                              'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85'
+                            }
+                            alt={tool.name}
+                            imgClassName="w-8 h-8 object-contain rounded-full shadow-xs"
+                          />
+                        )}
                       </span>
                       <span className="tracking-tight">{tool.name}</span>
                     </div>
@@ -667,7 +450,7 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                       <h3 className="text-base font-bold text-slate-900 mt-0.5">{job.role}</h3>
                       <div className="text-xs font-semibold text-slate-600">{job.company}</div>
                       <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                        {job.description}
+                        {summaryLexicalContent(job.desc)}
                       </p>
                     </div>
                   ))}

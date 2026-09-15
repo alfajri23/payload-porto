@@ -331,14 +331,6 @@ export interface Media {
       filesize?: number | null;
       filename?: string | null;
     };
-    og?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
   };
 }
 /**
@@ -607,7 +599,21 @@ export interface Experience {
   role: string;
   company: string;
   period: string;
-  description: string;
+  desc: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   order?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -1055,16 +1061,6 @@ export interface MediaSelect<T extends boolean = true> {
               filesize?: T;
               filename?: T;
             };
-        og?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
       };
 }
 /**
@@ -1126,7 +1122,7 @@ export interface ExperiencesSelect<T extends boolean = true> {
   role?: T;
   company?: T;
   period?: T;
-  description?: T;
+  desc?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;

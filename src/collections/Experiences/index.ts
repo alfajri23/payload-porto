@@ -1,6 +1,15 @@
 import type { CollectionConfig } from 'payload'
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
+import {
+  FixedToolbarFeature,
+  HeadingFeature,
+  OrderedListFeature,
+  UnorderedListFeature,
+  HorizontalRuleFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 
 export const Experiences: CollectionConfig = {
   slug: 'experiences',
@@ -34,9 +43,22 @@ export const Experiences: CollectionConfig = {
       required: true,
     },
     {
-      name: 'description',
-      label: 'Deskripsi Pekerjaan',
-      type: 'textarea',
+      name: 'desc',
+      type: 'richText',
+      editor: lexicalEditor({
+        features: ({ rootFeatures }) => {
+          return [
+            ...rootFeatures,
+            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+            HorizontalRuleFeature(),
+            OrderedListFeature(),
+            UnorderedListFeature(),
+          ]
+        },
+      }),
+      label: 'Description',
       required: true,
     },
     {
