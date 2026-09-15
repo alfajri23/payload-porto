@@ -29,6 +29,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerTheme])
 
+  if (pathname?.startsWith('/demo')) {
+    return null
+  }
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#E8E6DF] bg-[#FAF8F5]/90 backdrop-blur-md font-poppins" {...(theme ? { 'data-theme': theme } : {})}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5 md:px-10">
