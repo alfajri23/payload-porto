@@ -63,6 +63,9 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
   let alt = altFromProps
   let src: StaticImageData | string = srcFromProps || ''
 
+  const DEFAULT_PLACEHOLDER =
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85'
+
   if (!src && resource && typeof resource === 'object') {
     const { alt: altFromResource, height: fullHeight, url, width: fullWidth } = resource
 
@@ -73,6 +76,12 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
     const cacheTag = resource.updatedAt
 
     src = getMediaUrl(url, cacheTag)
+  } else if (resource && typeof resource === 'string') {
+    src = getMediaUrl(resource)
+  }
+
+  if (!src) {
+    src = DEFAULT_PLACEHOLDER
   }
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
