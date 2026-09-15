@@ -3,818 +3,543 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-export type ProjectItem = {
-  id: string
-  title: string
-  subtitle?: string
-  client?: string
-  year?: string | number
-  category?: string
-  impact?: string
-  summary?: string
-  challenge?: string
-  solution?: string
-  deliverables?: string[]
-  image?: string
-  color?: string
-  slug?: string
-  link?: string
-}
-
-export type ToolItem = {
-  name: string
-  color?: string
-  icon?: string | React.ReactNode
-}
-
-export type ExperienceItem = {
-  period: string
-  role: string
-  company: string
-  description: string
-}
-
-export type EducationItem = {
-  year: string
-  title: string
-  institution: string
-}
-
-export type HeroData = {
-  headline?: string
-  subheadline?: string
-  description?: string
-  image?: string
-}
+import { Education, Experience, LandingPage, Project, Tool } from '@/payload-types'
+import { ImageMedia } from '@/components/Media/ImageMedia'
+import { summaryLexicalContent } from '@/utilities/extractLexical'
 
 type Props = {
-  hero?: HeroData
-  projects: ProjectItem[]
-  tools: ToolItem[]
-  experiences: ExperienceItem[]
-  educations: EducationItem[]
+  landingPage: LandingPage
+  experience: Experience[]
+  education: Education[]
+  tools?: Tool[]
 }
 
-export default function PortfolioClient({ hero, projects, tools, experiences, educations }: Props) {
-  const [activeProject, setActiveProject] = useState<ProjectItem>(projects[0] || null)
-  const [selectedModalProject, setSelectedModalProject] = useState<ProjectItem | null>(null)
+const COMPANIES = [
+  { url: 'https://www.linkedin.com', name: 'Linkedin', style: 'font-black tracking-tight' },
+  { url: 'https://www.github.com', name: 'Github', style: 'font-black tracking-widest' },
+  { url: 'mailto:rian.kurnia@devfolio.io', name: 'Gmail', style: 'font-serif  font-bold' },
+]
+
+export default function Page({ landingPage, experience, education, tools }: Props) {
   const [copiedEmail, setCopiedEmail] = useState(false)
+  const [activeHudTag, setActiveHudTag] = useState<string | null>('architecture')
+
+  const projects = (landingPage?.project || []) as Project[]
+  const toolsList = (tools || []) as Tool[]
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('adrian.pratama@studiofolio.id')
     setCopiedEmail(true)
-    setTimeout(() => setCopiedEmail(false), 2400)
+    setTimeout(() => setCopiedEmail(false), 2000)
   }
 
-  // Keyboard accessibility: Escape key closes modal
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setSelectedModalProject(null)
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
-
-  // Keep activeProject in sync if projects change
-  useEffect(() => {
-    if (projects.length > 0 && !activeProject) {
-      setActiveProject(projects[0])
-    }
-  }, [projects, activeProject])
-
-  const headline = hero?.headline || 'Adrian Pratama'
-  const subheadline =
-    hero?.subheadline ||
-    'Directing high-density interaction models • Enterprise Telemetry • Fintech'
-  const heroDescription =
-    hero?.description ||
-    'Engineering intuitive software interfaces, spatial design token systems, and mission-critical digital products with mathematical precision.'
-  const heroImage =
-    hero?.image ||
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80'
-
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#121212] font-poppins antialiased selection:bg-[#0D99FF] selection:text-white">
+    <div className="min-h-screen bg-white text-[#111827] font-sans antialiased selection:bg-[#E5E7EB] selection:text-black">
       <main>
-        {/* ========================================================== */}
-        {/* HERO SECTION: FIGMA ART DIRECTION                         */}
-        {/* ========================================================== */}
+        {/* HERO SECTION */}
         <section
-          id="hero"
-          className="relative flex flex-col justify-between px-6 py-5 sm:px-10 md:px-14 h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] overflow-hidden bg-gradient-to-br from-[#F5F2EA] via-[#FBF9F5] to-[#EBE6DA] [background-image:radial-gradient(#D5D0C3_1px,transparent_1px)] [background-size:24px_24px]"
-          aria-label="Designer Introduction"
+          aria-label="Portfolio Introduction"
+          className="relative bg-white flex flex-col justify-between px-6 sm:px-10 md:px-12 lg:px-16 xl:px-20 py-8 sm:py-10 overflow-hidden border-b border-[#F0F2F5]"
         >
-          {/* Saturated Ambient Color Glows */}
-          <div className="pointer-events-none absolute -top-28 left-8 h-96 w-96 rounded-full bg-gradient-to-tr from-[#A259FF]/20 to-[#8B5CF6]/15 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 right-8 h-96 w-96 rounded-full bg-gradient-to-bl from-[#0D99FF]/20 to-[#06B6D4]/15 blur-3xl" />
-          <div className="pointer-events-none absolute top-1/2 left-1/3 h-80 w-80 rounded-full bg-gradient-to-br from-[#FF7262]/15 to-[#F59E0B]/12 blur-3xl" />
-
-          {/* Architectural Hairlines & Crosshairs */}
-          <div className="pointer-events-none absolute inset-0 mx-auto max-w-6xl">
-            <div className="absolute left-0 top-0 h-full w-px bg-[#DCD6CA]/80" />
-            <div className="absolute right-0 top-0 h-full w-px bg-[#DCD6CA]/80" />
-            <span className="absolute left-[-5px] top-4 font-mono text-[10px] text-[#A8A398]">
-              +
-            </span>
-            <span className="absolute right-[-5px] top-4 font-mono text-[10px] text-[#A8A398]">
-              +
-            </span>
-            <span className="absolute left-[-5px] bottom-4 font-mono text-[10px] text-[#A8A398]">
-              +
-            </span>
-            <span className="absolute right-[-5px] bottom-4 font-mono text-[10px] text-[#A8A398]">
-              +
-            </span>
+          {/* Top Availability Row */}
+          <div className="mx-auto w-full max-w-7xl pt-1 lg:pt-2">
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-1 shadow-xs transition-transform hover:scale-[1.02]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-xs font-medium text-slate-700">
+                Available for contracts &amp; full-time engineering roles
+              </span>
+            </div>
           </div>
 
-          <div className="mx-auto w-full max-w-6xl h-full flex flex-col justify-between relative z-10">
-            {/* CENTER STAGE: BALANCED 2-COLUMN GRID */}
-            <div className="my-auto py-3 grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-12">
-              {/* LEFT COLUMN: FIGMA COMPONENT HERO */}
-              <div className="flex flex-col justify-center space-y-3.5 lg:col-span-7">
-                {/* FIGMA SELECTION COMPONENT BOX AROUND HEADLINE */}
-                <div className="relative rounded-2xl border-1 border-[#0D99FF]/70 bg-white/80 p-5 sm:p-7 backdrop-blur-md shadow-[0_8px_30px_rgba(13,153,255,0.08)]">
-                  {/* Multi-Color Corner Resize Square Handles */}
-                  <span
-                    className="absolute -left-1.5 -top-1.5 h-3 w-3 border-2 border-[#0D99FF] bg-white shadow-xs"
-                    title="Node: Cyan"
-                  />
-                  <span
-                    className="absolute -right-1.5 -top-1.5 h-3 w-3 border-2 border-[#A259FF] bg-white shadow-xs"
-                    title="Node: Purple"
-                  />
-                  <span
-                    className="absolute -bottom-1.5 -left-1.5 h-3 w-3 border-2 border-[#0ACF83] bg-white shadow-xs"
-                    title="Node: Green"
-                  />
-                  <span
-                    className="absolute -bottom-1.5 -right-1.5 h-3 w-3 border-2 border-[#FF7262] bg-white shadow-xs"
-                    title="Node: Coral"
-                  />
+          {/* Main 3-Column Hero Content */}
+          <div className="mx-auto w-full max-w-7xl my-auto py-6 sm:py-8 lg:py-1">
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-8 xl:gap-12">
+              {/* LEFT COLUMN: Main Typography & Action (Concise Copy) */}
+              <div className="lg:col-span-4 z-10 text-left">
+                <h1 className="text-3xl sm:text-4xl lg:text-[3.25rem] xl:text-[3.6rem] font-extrabold tracking-tight text-slate-900 leading-[1.1] sm:leading-[1.06]">
+                  {landingPage?.hero?.headline}
+                </h1>
 
-                  {/* INFORMATIVE DATA COMPONENT LAYER CHIP */}
-                  <div className="absolute -top-3 left-4 flex items-center gap-1.5 rounded-md bg-[#0D99FF] px-2.5 py-0.5 font-mono text-[10px] font-semibold text-white shadow-xs">
-                    <svg className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2l4 4-4 4-4-4 4-4zm-6 6l4 4-4 4-4-4 4-4zm12 0l4 4-4 4-4-4 4-4zm-6 6l4 4-4 4-4-4 4-4z" />
-                    </svg>
-                    <span>❖ Lead UI/UX Architect</span>
-                    <span className="text-white/80">&bull;</span>
-                    <span className="text-white/90">7+ Yrs &bull; 420+ Tokens Sync</span>
-                  </div>
-
-                  {/* Professional Typography Headline */}
-                  <h1 className="text-4xl sm:text-5xl lg:text-[3.8rem] font-extrabold tracking-tight text-[#111111] leading-[1.02] font-sans select-none">
-                    {headline}
-                  </h1>
-
-                  <p className="mt-2 text-sm sm:text-base font-medium text-[#4A4741]">
-                    {subheadline}
-                  </p>
-                </div>
-
-                {/* Concise Narrative */}
-                <p className="max-w-lg text-sm sm:text-base leading-relaxed text-[#55524C] font-normal">
-                  {heroDescription}
+                <p className="mt-4 sm:mt-5 max-w-md text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                  {landingPage?.hero?.description}
                 </p>
 
-                {/* Action Buttons: Contact Me & Download CV */}
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <Link
-                    href="/contact"
-                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full bg-[#111111] px-8 py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition-all hover:bg-[#0D99FF] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D99FF]"
-                  >
-                    <span>Contact Me</span>
-                    <span>&rarr;</span>
-                  </Link>
-
+                <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                   <a
-                    href="/Adrian-Pratama-CV.pdf"
-                    download="Adrian-Pratama-CV.pdf"
-                    className="inline-flex min-h-[46px] items-center gap-2 rounded-full border border-[#D5D0C5] bg-white px-6 py-2.5 text-xs sm:text-sm font-medium text-[#111111] shadow-2xs transition-all hover:border-[#0D99FF] hover:text-[#0D99FF] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D99FF]"
+                    href="#projects"
+                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 text-sm font-semibold text-white transition-all hover:bg-black hover:scale-105 shadow-md"
                   >
+                    <span>Explore Projects</span>
+                    <span className="text-xs">&darr;</span>
+                  </a>
+                  <Link
+                    href="/demo/developer/contact"
+                    className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-900 hover:bg-slate-50"
+                  >
+                    Contact Me
+                  </Link>
+                </div>
+              </div>
+
+              {/* CENTER COLUMN: Clean Portrait + Interactive HUD Reticles */}
+              <div className="relative flex justify-center lg:col-span-5 my-2 lg:my-0">
+                <div className="relative h-[340px] w-full max-w-[290px] sm:h-[400px] sm:max-w-[350px] lg:h-[450px] lg:max-w-[380px] xl:h-[480px] xl:max-w-[400px]">
+                  {/* Portrait with seamless bottom fade */}
+                  <div className="relative h-full w-full overflow-hidden rounded-3xl bg-slate-50">
+                    <ImageMedia
+                      resource={
+                        landingPage?.hero?.image ??
+                        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                      }
+                      priority
+                      fill
+                      alt=" Feri Alfajri - Systems Engineer Portrait"
+                      size="(max-width: 768px) 100vw, 420px"
+                      imgClassName="object-cover object-top contrast-105 filter brightness-100"
+                    />
+
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white/85 to-transparent" />
+                  </div>
+
+                  {/* HUD RETICLE 1: Systems Design */}
+                  <div
+                    onClick={() => setActiveHudTag('architecture')}
+                    className={`absolute top-6 right-2 sm:right-6 z-20 cursor-pointer transition-all duration-300 ${
+                      activeHudTag === 'architecture' ? 'scale-105' : 'opacity-85 hover:opacity-100'
+                    }`}
+                  >
+                    <div className="relative rounded-lg border-2 border-white bg-white/30 p-2 sm:p-2.5 backdrop-blur-md shadow-lg">
+                      <div className="flex items-start gap-1.5 sm:gap-2">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-xs mt-0.5" />
+                        <div>
+                          <div className="text-[11px] sm:text-xs font-bold text-white leading-tight drop-shadow-md">
+                            Systems Design
+                          </div>
+                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm">
+                            Distributed Mesh
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* HUD RETICLE 2: Latency & Throughput */}
+                  <div
+                    onClick={() => setActiveHudTag('throughput')}
+                    className={`absolute top-36 right-2 sm:right-4 z-20 cursor-pointer transition-all duration-300 ${
+                      activeHudTag === 'throughput' ? 'scale-105' : 'opacity-85 hover:opacity-100'
+                    }`}
+                  >
+                    <div className="relative rounded-lg border-2 border-white bg-white/30 p-2 sm:p-2.5 backdrop-blur-md shadow-lg">
+                      <div className="flex items-start gap-1.5 sm:gap-2">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-xs mt-0.5" />
+                        <div>
+                          <div className="text-[11px] sm:text-xs font-bold text-white leading-tight drop-shadow-md">
+                            Low Latency
+                          </div>
+                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm">
+                            p99 &lt; 4.2ms
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* HUD RETICLE 3: Zero Downtime Infrastructure */}
+                  <div
+                    onClick={() => setActiveHudTag('infra')}
+                    className={`absolute bottom-20 left-2 sm:left-6 z-20 cursor-pointer transition-all duration-300 ${
+                      activeHudTag === 'infra' ? 'scale-105' : 'opacity-85 hover:opacity-100'
+                    }`}
+                  >
+                    <div className="relative rounded-lg border-2 border-white bg-white/30 p-2 sm:p-2.5 backdrop-blur-md shadow-lg">
+                      <div className="flex items-start gap-1.5 sm:gap-2">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-xs mt-0.5" />
+                        <div>
+                          <div className="text-[11px] sm:text-xs font-bold text-white leading-tight drop-shadow-md">
+                            High Availability
+                          </div>
+                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm">
+                            99.99% Uptime
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* RIGHT COLUMN: Proportional Stats (Clean Cards on Mobile) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 sm:gap-4 lg:gap-6 xl:gap-7 lg:col-span-3 lg:pl-2">
+                {/* Stat 1 */}
+                {/* <div className="flex items-center gap-3.5 group rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5 sm:p-4 lg:border-none lg:bg-transparent lg:p-0">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 group-hover:border-slate-900 group-hover:text-slate-900 transition-all shadow-2xs">
                     <svg
-                      className="h-4 w-4"
+                      className="h-5 w-5"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                      strokeWidth="1.5"
                     >
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="7 10 12 15 17 10" />
-                      <line x1="12" y1="15" x2="12" y2="3" />
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                     </svg>
-                    <span>Download CV</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* RIGHT COLUMN: THE VOCAL POINT (PORTRAIT SPECIMEN) */}
-              <div className="relative lg:col-span-5 flex justify-center lg:justify-end">
-                <div className="relative w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[350px]">
-                  {/* FIGMA LIVE COLLABORATIVE CURSOR 1 (Purple) */}
-                  <div className="absolute -top-3.5 -left-3 z-30 flex items-center gap-1 animate-pulse">
-                    <svg
-                      className="w-4 h-4 text-[#A259FF] drop-shadow-sm"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M4 2l16 11.5-6.5 1.5 4 7.5-2.5 1.5-4-7.5-5 5V2z" />
-                    </svg>
-                    <span className="rounded-full bg-[#A259FF] px-2.5 py-0.5 font-mono text-[9px] font-semibold text-white shadow-md">
-                      Adrian (Lead UI/UX)
-                    </span>
                   </div>
-
-                  {/* FIGMA DEV MODE CURSOR 2 (Green) */}
-                  <div className="absolute -bottom-3 -right-2 z-30 flex items-center gap-1">
-                    <svg
-                      className="w-4 h-4 text-[#0ACF83] drop-shadow-sm"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M4 2l16 11.5-6.5 1.5 4 7.5-2.5 1.5-4-7.5-5 5V2z" />
-                    </svg>
-                    <span className="rounded-full bg-[#0ACF83] px-2.5 py-0.5 font-mono text-[9px] font-semibold text-white shadow-md">
-                      Dev Mode: Inspect
-                    </span>
-                  </div>
-
-                  {/* MAIN FIGMA SELECTION SPECIMEN BOX */}
-                  <div className="relative rounded-2xl border-2 border-[#0D99FF] bg-white p-2.5 shadow-[0_16px_45px_rgba(13,153,255,0.18)]">
-                    {/* Top Layer Header Tag */}
-                    <div className="flex items-center justify-between pb-1.5 px-1 font-mono text-[10px] text-[#7A756D]">
-                      <span className="font-bold text-[#0D99FF] flex items-center gap-1">
-                        <span>❖ Frame: Specimen</span>
-                      </span>
-                      <span>1200 &times; 1500px</span>
+                  <div>
+                    <div className="text-xl font-bold tracking-tight text-slate-900">99.99%</div>
+                    <div className="text-xs font-medium text-slate-500 leading-snug">
+                      Production uptime
                     </div>
+                  </div>
+                </div> */}
 
-                    {/* 4 Corner Resize Handles */}
-                    <span className="absolute -left-1.5 -top-1.5 h-3 w-3 border border-[#0D99FF] bg-white" />
-                    <span className="absolute -right-1.5 -top-1.5 h-3 w-3 border border-[#0D99FF] bg-white" />
-                    <span className="absolute -bottom-1.5 -left-1.5 h-3 w-3 border border-[#0D99FF] bg-white" />
-                    <span className="absolute -bottom-1.5 -right-1.5 h-3 w-3 border border-[#0D99FF] bg-white" />
+                {/* Stat 2 */}
+                <div className="flex items-center gap-3.5 group rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5 sm:p-4 lg:border-none lg:bg-transparent lg:p-0">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 group-hover:border-slate-900 group-hover:text-slate-900 transition-all shadow-2xs">
+                    <svg
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    >
+                      <circle cx="10" cy="12" r="7" />
+                      <circle cx="14" cy="12" r="7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold tracking-tight text-slate-900">10+</div>
+                    <div className="text-xs font-medium text-slate-500 leading-snug">
+                      Systems deployed
+                    </div>
+                  </div>
+                </div>
 
-                    {/* The Focal Point Portrait Image */}
-                    <div className="relative aspect-[4/5] max-h-[350px] sm:max-h-[390px] w-full overflow-hidden rounded-xl bg-[#ECE7DF] shadow-inner">
-                      <Image
-                        src={heroImage}
-                        alt={headline}
-                        fill
-                        priority
-                        sizes="(max-width: 768px) 100vw, 350px"
-                        className="object-cover object-center filter contrast-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
-
-                      {/* Bottom Image Specimen Label */}
-                      <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between rounded-lg bg-black/65 px-3 py-1.5 text-[10px] font-mono text-white/90 backdrop-blur-md">
-                        <span>{headline}</span>
-                        <span className="text-[#0ACF83] font-semibold">&bull; Active Scope</span>
-                      </div>
+                {/* Stat 3 */}
+                <div className="flex items-center gap-3.5 group rounded-2xl border border-slate-100 bg-slate-50/70 p-3.5 sm:p-4 lg:border-none lg:bg-transparent lg:p-0">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-600 group-hover:border-slate-900 group-hover:text-slate-900 transition-all shadow-2xs">
+                    <svg
+                      className="h-5 w-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    >
+                      <ellipse cx="12" cy="5" rx="9" ry="3" />
+                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold tracking-tight text-slate-900">3+ yrs</div>
+                    <div className="text-xs font-medium text-slate-500 leading-snug">
+                      Engineering experience
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* BOTTOM FIGMA STATUS BAR */}
-            <div className="flex items-center justify-between font-mono text-xs text-[#7A756D] border-t border-[#DDD8CD]/80 pt-2 pb-1">
-              <div className="flex items-center gap-4 sm:gap-6">
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded bg-[#0D99FF]" />
-                  <span>8pt Grid System</span>
-                </span>
-                <span className="hidden sm:flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded bg-[#A259FF]" />
-                  <span>Tokens Studio Synced</span>
-                </span>
+          {/* Bottom Partner Logo Bar */}
+          <div className="mx-auto w-full max-w-7xl border-t border-slate-100 pt-10 pb-3 sm:pt-10 sm:pb-2">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                Contant me on:
+              </span>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-6 sm:gap-8 md:gap-11 opacity-60 grayscale transition-opacity">
+                {COMPANIES.map((comp) => (
+                  <a
+                    key={comp.name}
+                    href={comp.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-sm sm:text-base text-slate-800 hover:opacity-90 ${comp.style}`}
+                  >
+                    {comp.name}
+                  </a>
+                ))}
               </div>
-              <a
-                href="#works"
-                className="flex items-center gap-1.5 font-semibold text-[#111111] hover:text-[#0D99FF] transition-colors"
-              >
-                <span>Selected Works</span>
-                <span>&darr;</span>
-              </a>
             </div>
           </div>
         </section>
 
-        {/* ========================================================== */}
-        {/* SECTION 01: SELECTED WORKS                                 */}
-        {/* ========================================================== */}
+        {/* PRODUCT */}
         <section
-          id="works"
-          className="px-6 py-20 md:px-10 md:py-28 bg-[#FAF8F5] border-t border-[#E8E6DF]"
-          aria-label="Selected Works"
+          id="projects"
+          aria-label="Featured Projects"
+          className="border-b border-[#F0F2F5] bg-white py-14 sm:py-18"
         >
-          <div className="mx-auto max-w-6xl">
-            {/* EDITORIAL SECTION HEADER */}
-            <div className="mb-14 border-b border-[#DFDAD0] pb-8">
-              <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-                <div>
-                  <div className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[#121212]">
-                    <span className="h-2 w-2 rounded-full bg-[#F3A824]" />
-                    SECTION 01 • PORTFOLIO ARCHIVE
-                  </div>
-                  <h2 className="mt-2 text-3xl font-black uppercase tracking-tight text-[#121212] sm:text-4xl md:text-5xl">
-                    Selected Works
-                  </h2>
-                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#5C5A55]">
-                    In-depth case studies covering financial trading consoles, spatial cloud
-                    topology, design token infrastructure, and high-contrast healthcare interfaces.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3 font-mono text-xs text-[#7A7873]">
-                  <Link
-                    href="/projects"
-                    className="rounded-full border border-[#DDD8CD] bg-white px-3.5 py-1.5 font-semibold text-[#121212] shadow-xs hover:border-[#0D99FF] hover:text-[#0D99FF] transition-all"
-                  >
-                    View All Projects &rarr;
-                  </Link>
-                </div>
+          <div className="mx-auto max-w-7xl px-6 sm:px-10 md:px-12 lg:px-16 xl:px-20">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pb-5 mb-8 border-b border-slate-100">
+              <div>
+                <span className="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                  Selected Work
+                </span>
+                <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                  Featured Projects
+                </h2>
               </div>
+              <Link
+                href="/demo/developer/projects"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white hover:bg-black transition-all shadow-xs w-full sm:w-auto"
+              >
+                <span>View Project Archive ({projects.length})</span>
+                <span className="text-sm">&rarr;</span>
+              </Link>
             </div>
 
-            {/* UNIFIED INTERACTIVE LIST + LIVE PREVIEW DOCK */}
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
-              {/* Left Column: Interactive Project Items */}
-              <div className="lg:col-span-7 space-y-6">
-                {projects.map((project, idx) => {
-                  const isSelected = activeProject?.id === project.id
-                  return (
-                    <div
-                      key={project.id || idx}
-                      onMouseEnter={() => setActiveProject(project)}
-                      onClick={() => setSelectedModalProject(project)}
-                      className={`group cursor-pointer rounded-2xl border p-5 sm:p-6 transition-all duration-300 ${
-                        isSelected
-                          ? 'border-[#0D99FF] bg-white shadow-lg ring-1 ring-[#0D99FF]/20'
-                          : 'border-[#E5E2DA] bg-white/70 hover:border-[#0D99FF]/60 hover:bg-white hover:shadow-md'
-                      }`}
-                      tabIndex={0}
-                      role="button"
-                      aria-label={`Inspect ${project.title}`}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          setSelectedModalProject(project)
+            {/* 6 Eye-Catching Cards Grid (3 Columns on Desktop, Perfectly Balanced) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 lg:gap-8">
+              {projects.map((proj) => (
+                <Link
+                  key={proj.id}
+                  href={`/demo/developer/projects/${proj.slug}`}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-slate-300"
+                >
+                  <div>
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                      <ImageMedia
+                        resource={
+                          proj.image?.[0] ||
+                          'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85'
                         }
-                      }}
-                    >
-                      <div className="flex flex-col gap-3">
-                        {/* Top Meta Bar */}
-                        <div className="flex items-center justify-between text-xs font-semibold">
-                          <span className="flex items-center gap-2 font-mono font-bold text-[#0D99FF]">
-                            <span className="flex h-5 w-5 items-center justify-center rounded bg-[#0D99FF]/10 text-[11px]">
-                              {project.id}
-                            </span>
-                            <span>{project.category}</span>
-                          </span>
-                          <span className="font-mono text-[#7A7873]">
-                            {project.year} {project.client ? `• ${project.client}` : ''}
-                          </span>
-                        </div>
+                        alt={proj.title}
+                        fill
+                        size="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        imgClassName="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
 
-                        {/* Distinct Project Title with Arrow */}
-                        <div className="flex items-center justify-between gap-4">
-                          <h3 className="text-xl font-bold tracking-tight text-[#121212] transition-colors duration-200 group-hover:text-[#0D99FF] sm:text-2xl">
-                            {project.title}
-                          </h3>
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0D99FF]/10 px-3 py-1 text-xs font-bold text-[#0D99FF] group-hover:bg-[#0D99FF] group-hover:text-white transition-all">
-                            <span>Inspect Scope</span>
-                            <span>&rarr;</span>
+                    <div className="p-5 sm:p-6">
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                        <span className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider">
+                          {proj.type}
+                        </span>
+                        {proj.year && (
+                          <span className="text-[11px] font-medium text-slate-400">
+                            {proj.year}
                           </span>
-                        </div>
-
-                        {/* Subtitle */}
-                        {project.subtitle && (
-                          <p className="text-xs font-medium text-[#7A7873]">{project.subtitle}</p>
                         )}
+                      </div>
 
-                        {/* Short Description */}
-                        {project.summary && (
-                          <p className="text-sm leading-relaxed text-[#5C5A55]">
-                            {project.summary}
-                          </p>
-                        )}
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                        {proj.title}
+                      </h3>
 
-                        {/* Measurable Impact & Deliverables Bar */}
-                        <div className="mt-1 flex flex-wrap items-center gap-2 border-t border-[#F0EFEA] pt-3">
-                          {project.impact && (
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0ACF83]/10 px-2.5 py-0.5 text-xs font-bold text-[#0B8556]">
-                              <span className="h-1.5 w-1.5 rounded-full bg-[#0ACF83]" />
-                              <span>{project.impact}</span>
-                            </span>
-                          )}
+                      {proj.description && (
+                        <p className="mt-2 text-xs sm:text-[13px] text-slate-600 leading-relaxed line-clamp-2 font-normal">
+                          {summaryLexicalContent(proj.description)}
+                        </p>
+                      )}
 
-                          {project.deliverables?.map((d, dIdx) => (
-                            <span
-                              key={dIdx}
-                              className="rounded-md bg-[#F2EFE9] px-2 py-0.5 font-mono text-[11px] text-[#55524C]"
-                            >
-                              {d}
-                            </span>
-                          ))}
-
-                          {project.slug && (
-                            <Link
-                              href={`/projects/${project.slug}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="ml-auto inline-flex items-center gap-1 text-xs font-bold text-[#0D99FF] hover:underline"
-                            >
-                              <span>Full Study</span>
-                              <span>&rarr;</span>
-                            </Link>
-                          )}
+                      {proj.label && (
+                        <div className="mt-3">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                            <span className="truncate max-w-[240px]">{proj.label}</span>
+                          </span>
                         </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-
-              {/* Right Column: Live Sticky Specimen Inspector */}
-              <div className="lg:col-span-5">
-                {activeProject && (
-                  <div className="sticky top-20 rounded-3xl border-2 border-[#121212] bg-[#121212] p-5 text-white shadow-2xl sm:p-7">
-                    {/* Live Inspector Header */}
-                    <div className="flex items-center justify-between border-b border-white/10 pb-4 font-mono text-xs">
-                      <span className="flex items-center gap-2 font-bold text-[#0D99FF]">
-                        <span className="h-2 w-2 rounded-full bg-[#0D99FF] animate-pulse" />
-                        SPECIMEN INSPECTOR • {activeProject.id}
-                      </span>
-                      <span className="text-[#888888]">{activeProject.year}</span>
-                    </div>
-
-                    {/* Project Preview Image */}
-                    {activeProject.image && (
-                      <div className="relative mt-4 aspect-[16/10] w-full overflow-hidden rounded-xl bg-[#222222]">
-                        <Image
-                          src={activeProject.image}
-                          alt={activeProject.title}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 450px"
-                          className="object-cover object-top transition-transform duration-500 hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-white/90">
-                          <span>{activeProject.client || activeProject.category}</span>
-                          <span className="font-bold text-[#0ACF83]">{activeProject.impact}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Project Anatomy & Specs */}
-                    <div className="mt-5 space-y-3 font-mono text-xs">
-                      <div className="flex justify-between border-b border-white/10 pb-2">
-                        <span className="text-[#888888]">Architecture</span>
-                        <span className="font-semibold text-white">{activeProject.category}</span>
-                      </div>
-                      <div className="flex justify-between border-b border-white/10 pb-2">
-                        <span className="text-[#888888]">Primary Outcome</span>
-                        <span className="font-semibold text-[#0D99FF]">{activeProject.impact}</span>
-                      </div>
-                    </div>
-
-                    {/* Direct Inspection Action */}
-                    <div className="mt-6 flex flex-col gap-2">
-                      <button
-                        onClick={() => setSelectedModalProject(activeProject)}
-                        className="flex w-full items-center justify-center gap-2 rounded-full bg-[#0D99FF] py-3 text-xs font-bold text-white transition-all hover:bg-[#007FE0]"
-                      >
-                        <span>Open Detailed Case Study</span>
-                        <span>&rarr;</span>
-                      </button>
-
-                      {activeProject.slug && (
-                        <Link
-                          href={`/projects/${activeProject.slug}`}
-                          className="flex w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-transparent py-2.5 text-xs font-medium text-white/90 hover:bg-white/10 transition-colors"
-                        >
-                          <span>Dedicated Project Page</span>
-                          <span>&rarr;</span>
-                        </Link>
                       )}
                     </div>
                   </div>
-                )}
-              </div>
+
+                  <div className="mx-5 sm:mx-6 pb-5 sm:pb-6 pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
+                      View Case Study
+                    </span>
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                      <svg
+                        className="h-3.5 w-3.5 transform group-hover:translate-x-0.5 transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ========================================================== */}
-        {/* SECTION 02: SPECIALIZED TOOLS (ICON & NAME ONLY)           */}
-        {/* ========================================================== */}
+        {/* TOOLS */}
         <section
           id="tools"
-          className="border-t border-[#DFDAD0] bg-[#F7F5F0] px-6 py-16 md:px-10 md:py-20"
-          aria-label="Design and Engineering Tools"
+          aria-label="Specialized Toolchain"
+          className="border-b border-[#F0F2F5] bg-[#FAFAFA] py-14 sm:py-20"
         >
-          <div className="mx-auto max-w-6xl">
-            {/* Section Header */}
-            <div className="mb-10 flex flex-col justify-between gap-3 border-b border-[#DDD8CD] pb-6 sm:flex-row sm:items-end">
+          <div className="mx-auto max-w-7xl px-6 sm:px-10 md:px-12 lg:px-16 xl:px-20">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 sm:mb-10 pb-5 sm:pb-6 border-b border-slate-200">
               <div>
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#8B5CF6]">
-                  SECTION 02 • TOOLKIT
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Core Capabilities
                 </span>
-                <h2 className="mt-1 text-2xl font-black uppercase tracking-tight text-[#121212] sm:text-3xl md:text-4xl">
-                  Specialized Tools &amp; Stack
+                <h2 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+                  Specialized Tools &amp; Infrastructure
                 </h2>
               </div>
-              <p className="font-mono text-xs text-[#7A7873]">
-                Daily driver software for product architecture, interaction, &amp; code
+              <p className="mt-2 sm:mt-0 text-xs sm:text-sm text-slate-500">
+                Production runtimes, distributed storage engines, and cloud platforms.
               </p>
             </div>
 
-            {/* Clean Grid: ONLY ICON & TOOL NAME */}
-            <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4 md:gap-5">
-              {tools.map((tool, idx) => {
-                const toolColor = tool.color || '#0D99FF'
-                return (
-                  <div
-                    key={idx}
-                    className="group flex items-center gap-3.5 rounded-2xl border border-[#E3DFD5] bg-white p-4 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-[#8B5CF6]/50 hover:shadow-md"
-                  >
+            {/* Categorized Pill Matrix */}
+            <div className="space-y-6">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-2.5 sm:gap-3 lg:gap-6">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+                  {toolsList.map((tool) => (
                     <div
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
-                      style={{ backgroundColor: `${toolColor}15` }}
+                      key={tool.name}
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-slate-800 shadow-2xs hover:border-slate-900 hover:shadow-xs transition-all cursor-default group"
                     >
-                      {typeof tool.icon === 'string' ? (
-                        <div className="relative h-6 w-6">
-                          <Image src={tool.icon} alt={tool.name} fill className="object-contain" />
-                        </div>
-                      ) : tool.icon ? (
-                        tool.icon
-                      ) : (
-                        <span className="font-mono font-bold text-sm" style={{ color: toolColor }}>
-                          {tool.name.slice(0, 2).toUpperCase()}
-                        </span>
-                      )}
+                      <span className="shrink-0 transition-transform group-hover:scale-110">
+                        {tool.icon && (
+                          <ImageMedia
+                            resource={
+                              tool.icon ||
+                              'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85'
+                            }
+                            alt={tool.name}
+                            imgClassName="w-8 h-8 object-contain rounded-full shadow-xs"
+                          />
+                        )}
+                      </span>
+                      <span className="tracking-tight">{tool.name}</span>
                     </div>
-                    <div>
-                      <h3 className="text-sm sm:text-base font-bold text-[#121212] transition-colors duration-200 group-hover:text-[#7C3AED]">
-                        {tool.name}
-                      </h3>
-                    </div>
-                  </div>
-                )
-              })}
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* ========================================================== */}
-        {/* SECTION 03: EXPERIENCE & EDUCATION                        */}
-        {/* ========================================================== */}
+        {/* EDUCATION & CAREER */}
         <section
           id="experience"
-          className="border-t border-[#E0DBD0] bg-[#ECE8DF] px-6 py-20 md:px-10 md:py-24"
-          aria-label="Career Experience and Education"
+          aria-label="Work Experience and Education"
+          className="border-t border-[#F3F4F6] bg-[#FAFAFA] py-14 sm:py-20 lg:py-28"
         >
-          <div className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
-              {/* Left Column: Work Experience */}
+          <div className="mx-auto max-w-7xl px-6 sm:px-10 md:px-12 lg:px-16 xl:px-20">
+            <div className="grid grid-cols-1 gap-10 sm:gap-12 lg:grid-cols-12">
+              {/* Left Column: Career Timeline */}
               <div className="lg:col-span-7">
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#F3A824]">
-                  SECTION 03 • TRAJECTORY
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Career Trajectory
                 </span>
-                <h2 className="mt-1 text-2xl font-black uppercase tracking-tight text-[#121212] sm:text-3xl">
+                <h2 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
                   Work Experience
                 </h2>
 
-                <div className="mt-8 space-y-8 border-l-2 border-[#DDD8CD] pl-5">
-                  {experiences.map((exp, idx) => (
-                    <div key={idx} className="relative">
-                      {/* Active indicator node */}
-                      <span className="absolute -left-[27px] top-1.5 h-3 w-3 rounded-full border-2 border-[#F2EFE9] bg-[#0D99FF] shadow-xs" />
-
-                      <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <h3 className="text-base font-bold text-[#121212]">{exp.role}</h3>
-                        <span className="font-mono text-xs font-semibold text-[#0D99FF]">
-                          {exp.period}
-                        </span>
-                      </div>
-                      <p className="text-xs font-medium text-[#6E6D68]">{exp.company}</p>
-                      <p className="mt-2 text-sm leading-relaxed text-[#5C5A55]">
-                        {exp.description}
+                <div className="mt-6 sm:mt-8 space-y-6 sm:space-y-7">
+                  {experience.map((job) => (
+                    <div
+                      key={job.period}
+                      className="relative pl-6 sm:pl-7 border-l-2 border-slate-200"
+                    >
+                      <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full border-2 border-white bg-slate-900" />
+                      <span className="text-xs font-bold text-slate-500">{job.period}</span>
+                      <h3 className="text-base font-bold text-slate-900 mt-0.5">{job.role}</h3>
+                      <div className="text-xs font-semibold text-slate-600">{job.company}</div>
+                      <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                        {summaryLexicalContent(job.desc)}
                       </p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Right Column: Education & Design Philosophy */}
-              <div id="about" className="lg:col-span-5">
-                <div className="mb-8">
-                  <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#7A7873]">
-                    FOUNDATION
-                  </span>
-                  <h2 className="mt-1 text-2xl font-black uppercase tracking-tight text-[#121212] sm:text-3xl">
-                    Education &amp; Credentials
-                  </h2>
+              {/* Right Column: Education & Accreditations */}
+              <div className="lg:col-span-5">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Credentials
+                </span>
+                <h2 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+                  Education &amp; Honors
+                </h2>
 
-                  <div className="mt-6 space-y-4">
-                    {educations.map((edu, idx) => (
-                      <div
-                        key={idx}
-                        className="rounded-xl border border-[#DDD8CD] bg-white p-4 shadow-xs"
-                      >
-                        <span className="font-mono text-xs font-semibold text-[#0D99FF]">
-                          {edu.year}
-                        </span>
-                        <h4 className="mt-0.5 text-sm font-bold text-[#121212]">{edu.title}</h4>
-                        <p className="text-xs text-[#6E6D68]">{edu.institution}</p>
-                      </div>
-                    ))}
-                  </div>
+                <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-3.5">
+                  {education.map((edu) => (
+                    <div
+                      key={edu.title}
+                      className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs"
+                    >
+                      <span className="text-xs font-bold text-slate-500">{edu.year}</span>
+                      <h3 className="text-sm font-bold text-slate-900 mt-0.5">{edu.title}</h3>
+                      <p className="text-xs text-slate-600 mt-0.5">{edu.institution}</p>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Direct Philosophy Box */}
-                <div className="rounded-2xl border border-[#DDD8CD] bg-white p-6 shadow-xs">
-                  <h3 className="text-sm font-bold text-[#121212]">Design Principle</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#5C5A55]">
-                    Simplicity is the resolution of complexity, not its absence. I build software
-                    interfaces that honor user intent through direct manipulation, clear hierarchy,
-                    and predictable execution loops.
+                {/* Quick Consultation Callout */}
+                <div className="mt-6 rounded-2xl bg-[#111827] p-5 sm:p-6 text-white shadow-xs">
+                  <h3 className="text-base font-bold">Have a systems bottleneck?</h3>
+                  <p className="mt-1.5 text-xs text-[#9CA3AF] leading-relaxed">
+                    Available for backend performance audits, architecture reviews, and staff
+                    engineering contract engagements.
                   </p>
+                  <button
+                    onClick={handleCopyEmail}
+                    className="mt-4 inline-flex min-h-[40px] w-full items-center justify-center rounded-xl bg-white px-4 text-xs font-bold text-[#111827] hover:bg-[#F3F4F6] transition-all"
+                  >
+                    {copiedEmail ? 'Email Copied!' : 'Copy Email: feri.alfajri@gmail.com'}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ========================================================== */}
-        {/* SECTION 04: CALL TO ACTION                                 */}
-        {/* ========================================================== */}
+        {/* CONTACT */}
         <section
           id="contact"
-          className="bg-[#FAF8F5] border-t border-[#E8E6DF] px-6 py-16 md:px-10 md:py-20"
-          aria-label="Collaboration Inquiry"
+          aria-label="Contact Section"
+          className="bg-white py-14 sm:py-20 lg:py-24"
         >
-          <div className="mx-auto max-w-6xl">
-            <div className="rounded-3xl border border-[#E3E1DA] bg-white px-8 py-12 shadow-[0_16px_40px_rgba(0,0,0,0.03)] sm:px-12 md:py-16">
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#F3A824]">
-                INITIATE DIALOGUE
-              </span>
+          <div className="mx-auto max-w-4xl px-6 sm:px-10 md:px-12">
+            <div className="rounded-3xl px-6 py-10 sm:px-10 sm:py-14 lg:px-12 lg:py-16 text-center text-white shadow-xl bg-gray-900/90 backdrop-blur-md border border-white/10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-xs font-medium text-white/90 mb-4 sm:mb-5">
+                <span className="h-2 w-2 rounded-full bg-[#10B981]" />
+                <span>Available for Q3/Q4 Contracts &amp; Advisory</span>
+              </div>
 
-              <h2 className="mt-2 text-3xl font-black tracking-tight text-[#121212] sm:text-4xl md:text-5xl">
-                Have an ambitious product in mind? <br />
-                <span className="text-[#0D99FF]">Let&apos;s build it with purpose.</span>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
+                Need a Staff Systems Engineer?
               </h2>
 
-              <p className="mt-4 max-w-lg text-base leading-relaxed text-[#5C5A55]">
-                Currently open for UI/UX product architecture, design systems, and select consulting
-                contracts. Direct inquiries typically answered within 24 hours.
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-[#9CA3AF] max-w-lg mx-auto leading-relaxed">
+                Available for high-concurrency backend consulting, distributed streaming
+                architecture, and contract engagements.
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link
-                  href="/contact"
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-[#121212] px-8 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#0D99FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D99FF]"
+              <div className="mt-7 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-3.5 w-full sm:w-auto">
+                <a
+                  href="mailto:feri.alfajri@gmail.com"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-xl bg-white px-7 text-xs sm:text-sm font-bold text-[#111827] shadow-sm hover:bg-[#F3F4F6] transition-all w-full sm:w-auto"
                 >
-                  Go to Contact Page &rarr;
-                </Link>
+                  Send Direct Email
+                </a>
 
                 <button
                   onClick={handleCopyEmail}
-                  className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[#E3E1DA] bg-white px-6 py-3 font-mono text-xs font-medium text-[#121212] shadow-xs transition-all hover:border-[#0D99FF] hover:text-[#0D99FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D99FF]"
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-xs sm:text-sm font-semibold text-white hover:bg-white/10 transition-all w-full sm:w-auto"
                 >
-                  {copiedEmail ? 'Copied to Clipboard!' : 'Copy: adrian.pratama@studiofolio.id'}
+                  {copiedEmail ? 'Copied to Clipboard!' : 'Copy: feri.alfajri@gmail.com'}
                 </button>
               </div>
             </div>
           </div>
         </section>
       </main>
-
-      {/* ========================================================== */}
-      {/* CASE STUDY DETAIL MODAL                                    */}
-      {/* ========================================================== */}
-      {selectedModalProject && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity"
-          onClick={() => setSelectedModalProject(null)}
-        >
-          <div
-            className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-[#E3E1DA] bg-white p-6 shadow-2xl sm:p-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-[#E8E6DF] pb-4">
-              <div>
-                <span className="font-mono text-xs font-bold text-[#0D99FF]">
-                  {selectedModalProject.category}{' '}
-                  {selectedModalProject.year ? `• ${selectedModalProject.year}` : ''}
-                </span>
-                <h3 id="modal-title" className="mt-1 text-2xl font-bold text-[#121212] sm:text-3xl">
-                  {selectedModalProject.title}
-                </h3>
-                {selectedModalProject.subtitle && (
-                  <p className="text-xs text-[#7A7873]">{selectedModalProject.subtitle}</p>
-                )}
-              </div>
-
-              <button
-                onClick={() => setSelectedModalProject(null)}
-                aria-label="Close dialog"
-                className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[#E3E1DA] bg-[#FAF8F5] text-sm font-semibold text-[#121212] transition-colors hover:border-[#0D99FF] hover:text-[#0D99FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D99FF]"
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Modal Image */}
-            {selectedModalProject.image && (
-              <div className="relative mt-4 aspect-[16/10] w-full overflow-hidden rounded-xl bg-[#222222]">
-                <Image
-                  src={selectedModalProject.image}
-                  alt={selectedModalProject.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 600px"
-                  className="object-cover object-top"
-                />
-              </div>
-            )}
-
-            {/* Modal Content */}
-            <div className="mt-6 space-y-4 text-sm text-[#55524C] leading-relaxed">
-              {selectedModalProject.summary && (
-                <div>
-                  <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
-                    Overview
-                  </h4>
-                  <p className="mt-1">{selectedModalProject.summary}</p>
-                </div>
-              )}
-
-              {selectedModalProject.challenge && (
-                <div>
-                  <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
-                    Key Challenge
-                  </h4>
-                  <p className="mt-1">{selectedModalProject.challenge}</p>
-                </div>
-              )}
-
-              {selectedModalProject.solution && (
-                <div>
-                  <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
-                    Architectural Solution
-                  </h4>
-                  <p className="mt-1">{selectedModalProject.solution}</p>
-                </div>
-              )}
-
-              {selectedModalProject.impact && (
-                <div className="rounded-xl border border-[#0ACF83]/30 bg-[#0ACF83]/10 p-3 text-xs font-bold text-[#0B8556]">
-                  <span>Measurable Impact: {selectedModalProject.impact}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Modal Actions */}
-            <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-[#E8E6DF] pt-4">
-              {selectedModalProject.slug && (
-                <Link
-                  href={`/projects/${selectedModalProject.slug}`}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[#0D99FF] px-6 py-2.5 text-xs font-bold text-white transition-all hover:bg-[#007FE0]"
-                >
-                  <span>Open Dedicated Study Page</span>
-                  <span>&rarr;</span>
-                </Link>
-              )}
-
-              {selectedModalProject.link && (
-                <a
-                  href={
-                    selectedModalProject.link.startsWith('http')
-                      ? selectedModalProject.link
-                      : `https://${selectedModalProject.link}`
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#D5D0C5] bg-white px-5 py-2.5 text-xs font-medium text-[#111111] hover:border-[#0D99FF] hover:text-[#0D99FF]"
-                >
-                  <span>Visit Live Prototype</span>
-                  <span>&rarr;</span>
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
