@@ -3,13 +3,15 @@ import Link from 'next/link'
 import React from 'react'
 
 import { CMSLink } from '@/components/Link'
+import { FooterWrapper } from './Component.client'
 
 export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)().catch(() => null)
   const navItems = footerData?.navItems || []
 
   return (
-    <footer className="mt-auto border-t border-[#E8E6DF] bg-[#FAF8F5] text-[#121212] font-poppins">
+    <FooterWrapper>
+      <footer className="mt-auto border-t border-[#E8E6DF] bg-[#FAF8F5] text-[#121212] font-poppins">
       <div className="mx-auto max-w-6xl px-6 py-14 md:px-10 md:py-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-8">
           {/* Brand & Identity Column (6 Cols) */}
@@ -147,5 +149,6 @@ export async function Footer() {
         </div>
       </div>
     </footer>
+    </FooterWrapper>
   )
 }
