@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
-import { PayloadRedirects } from '@/components/PayloadRedirects'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
 import RichText from '@/components/RichText'
+import { ImageMedia } from '@/components/Media/ImageMedia'
+import { Education, Experience, LandingPage, Project, Tool } from '@/payload-types'
 
-type Args = {
+interface PageProps {
   params: Promise<{
     slug?: string
   }>
@@ -50,7 +51,7 @@ async function queryProjectBySlug(slug: string) {
   return result.docs[0] || null
 }
 
-export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+export async function generateMetadata({ params: paramsPromise }: PageProps): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
   const decodedSlug = decodeURIComponent(slug)
   const project = await queryProjectBySlug(decodedSlug)
@@ -67,350 +68,142 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   }
 }
 
-export default async function Project({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
+export default async function DeveloperProjectDetailPage({ params }: PageProps) {
+  const { slug } = await params
+  const decodedSlug = decodeURIComponent(slug || '')
+  const project = (await queryProjectBySlug(decodedSlug)) as Project
+  console.log('Project:', project)
 
-  const decodedSlug = decodeURIComponent(slug)
-  const url = '/projects/' + decodedSlug
-
-  const project = await queryProjectBySlug(decodedSlug)
-
-  if (!project) return <PayloadRedirects url={url} />
-
-  // Normalise uploaded images array
-  const rawImages = Array.isArray(project.image)
-    ? project.image
-    : project.image
-      ? [project.image]
-      : []
-
-  const mediaList = rawImages
-    .map((item) => {
-      if (typeof item === 'object' && item !== null && 'url' in item && item.url) {
-        return {
-          url: item.url as string,
-          alt: (item.alt as string) || project.title,
-        }
-      }
-      return null
-    })
-    .filter((item): item is { url: string; alt: string } => item !== null)
-
-  const primaryImage = mediaList[0] || null
-  const secondaryImages = mediaList.slice(1, 3)
-  const remainingImages = mediaList.slice(3)
+  if (!project) {
+    notFound()
+  }
 
   return (
-    <div className="min-h-screen bg-[#FBFBFB] text-slate-900 font-sans antialiased selection:bg-slate-200 selection:text-black pb-24">
-      {draft && <LivePreviewListener />}
-      <PayloadRedirects disableNotFound url={url} />
-
-      {/* ========================================================== */}
-      {/* 1. TOP MINIMAL NAVIGATION BAR                              */}
-      {/* ========================================================== */}
-      <nav
-        aria-label="Project Navigation"
-        className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 px-6 py-3.5 backdrop-blur-md sm:px-10 md:px-14"
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between text-xs">
-          <Link
-            href="/demo/developer"
-            className="group inline-flex items-center gap-2 font-semibold text-slate-700 transition-colors hover:text-blue-600"
-          >
-            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-[11px] shadow-2xs transition-transform group-hover:-translate-x-0.5 group-hover:border-blue-600">
-              &larr;
-            </span>
-            <span>Back to Projects</span>
-          </Link>
-
-          <div className="flex items-center gap-3">
-            {project.label && (
-              <span className="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700 sm:inline-flex">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                <span>{project.label}</span>
-              </span>
-            )}
-
-            {project.link && (
-              <a
-                href={project.link.startsWith('http') ? project.link : `https://${project.link}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-1.5 text-xs font-semibold text-white shadow-2xs transition-all hover:bg-black hover:scale-105"
+    <div className="min-h-screen bg-white text-slate-900 font-sans antialiased selection:bg-slate-200 selection:text-black flex flex-col justify-between">
+      <main className="flex-1">
+        {/* ========================================================== */}
+        {/* BREADCRUMBS & PROJECT HEADER                               */}
+        {/* ========================================================== */}
+        <section className="border-b border-slate-100 bg-white pt-10 pb-12 sm:pt-14 sm:pb-16">
+          <div className="mx-auto max-w-7xl px-6 sm:px-12 lg:px-16 xl:px-20">
+            {/* Breadcrumbs */}
+            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mb-6">
+              <Link href="/demo/developer" className="hover:text-slate-900 transition-colors">
+                Overview
+              </Link>
+              <span>/</span>
+              <Link
+                href="/demo/developer/projects"
+                className="hover:text-slate-900 transition-colors"
               >
-                <span>Live Project</span>
-                <svg
-                  className="h-3.5 w-3.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                >
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
-                </svg>
-              </a>
-            )}
-          </div>
-        </div>
-      </nav>
+                Projects
+              </Link>
+              <span>/</span>
+              <span className="text-slate-900 font-semibold">{project.title}</span>
+            </div>
 
-      <main className="mx-auto max-w-6xl px-6 pt-10 sm:px-10 sm:pt-14 md:px-14">
-        {/* ========================================================== */}
-        {/* 2. CORE HERO: TITLE, CASE STUDY NARRATIVE & ARTIFACTS      */}
-        {/* ========================================================== */}
-        <section
-          aria-label="Project Case Study Hero"
-          className="mb-14 border-b border-slate-200/80 pb-12"
-        >
-          {/* Top Tagline / Meta Pills */}
-          <div className="flex flex-wrap items-center gap-2 pb-4">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200/80 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
-              <span>{project.type || 'Engineering & Systems'}</span>
-            </span>
-
-            {project.label && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                <span>{project.label}</span>
-              </span>
-            )}
-
-            {project.year && (
-              <span className="text-xs font-medium text-slate-500">&bull; Year {project.year}</span>
-            )}
-          </div>
-
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-slate-900 leading-[1.1] mb-8">
-            {project.title}
-          </h1>
-
-          {/* 2-Column Hero Grid: Case Study Analysis + Project Artifacts */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 items-start">
-            {/* Left: Case Study Narrative (8 cols) */}
-            <div className="lg:col-span-8 rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-xs">
-              <div className="mb-5 flex items-center justify-between border-b border-slate-100 pb-3.5">
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-                  <span className="h-2 w-2 rounded-full bg-blue-600" />
-                  <span>Architecture &bull; Case Study Overview</span>
+            {/* Title & Metadata */}
+            <div className="max-w-4xl">
+              {project.type && (
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 mb-4">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span>{project.type}</span>
                 </div>
-                <span className="text-xs font-medium text-slate-400">Overview</span>
+              )}
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-[1.1]">
+                {project.title}
+              </h1>
+
+              <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-normal"></p>
+            </div>
+
+            {/* Spec Sheet Strip */}
+            <div className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4 border-t border-slate-100 pt-7 text-xs">
+              <div>
+                <span className="text-slate-500 uppercase tracking-wider font-semibold block">
+                  Production Year
+                </span>
+                <span className="font-bold text-slate-900 text-sm mt-1 block">{project.year}</span>
               </div>
 
-              {/* RichText Content */}
-              {project.description ? (
+              <div>
+                {project.link && (
+                  <>
+                    <span className="text-slate-500 uppercase tracking-wider font-semibold block">
+                      Source Repository
+                    </span>
+                    <Link
+                      href={
+                        project.link?.startsWith('http') ? project.link : `https://${project.link}`
+                      }
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-bold text-blue-600 text-sm mt-1 inline-flex items-center gap-1 hover:underline"
+                    >
+                      <span>Link</span>
+                      <span>&rarr;</span>
+                    </Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================== */}
+        {/* HERO IMAGE SPECIMEN                                        */}
+        {/* ========================================================== */}
+        <section className="bg-slate-50/50 py-10 sm:py-14 border-b border-slate-100">
+          <div className="mx-auto max-w-6xl px-6 sm:px-6">
+            {/* Remaining Images */}
+            {project.image && project.image.length > 0 && (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 pt-4">
+                {project.image.map((img, idx) => {
+                  if (typeof img === 'number' || !img) return null
+
+                  return (
+                    <div>
+                      <div
+                        key={img.id || idx}
+                        className="relative rounded-2xl border border-slate-200/80 bg-white p-2.5 transition-all hover:border-slate-400 hover:shadow-md shadow-xl"
+                      >
+                        <div className="relative w-full overflow-hidden rounded-lg bg-slate-100">
+                          <ImageMedia
+                            resource={img}
+                            alt={img.alt || `Preview ${idx + 1}`}
+                            size="(max-width: 768px) 100vw, 600px"
+                            imgClassName="object-top object-cover"
+                          />
+                        </div>
+                        <span className="mt-2 text-xs text-slate-700 block">{img.alt}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ========================================================== */}
+        {/* DEEP DIVE ARCHITECTURAL NARRATIVE                          */}
+        {/* ========================================================== */}
+        <section className="bg-white py-16 sm:py-24">
+          <div className="mx-auto max-w-7xl px-6 sm:px-12 lg:px-16 xl:px-20">
+            <div className="space-y-14">
+              {/* Section 01: Challenge */}
+              <div className="space-y-3">
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+                  Project Description
+                </h2>
                 <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed prose-headings:font-bold prose-headings:text-slate-900 prose-h2:text-2xl prose-h3:text-xl prose-p:text-sm sm:prose-p:text-base prose-p:leading-relaxed prose-li:text-sm sm:prose-li:text-base prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-700">
                   <RichText data={project.description} enableGutter={false} />
                 </div>
-              ) : (
-                <p className="text-sm leading-relaxed text-slate-500 italic">
-                  No narrative written yet. You can edit this in Payload CMS under the description
-                  field.
-                </p>
-              )}
-            </div>
-
-            {/* Right: Project Specs Box (4 cols) */}
-            <div className="lg:col-span-4 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs space-y-5">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-100 pb-3.5">
-                <span className="h-2 w-2 rounded-full bg-slate-900" />
-                <span>Project Specifications</span>
               </div>
-
-              <div className="space-y-3.5 text-xs">
-                <div className="flex justify-between border-b border-slate-100 pb-2.5">
-                  <span className="text-slate-500">Status</span>
-                  <span className="font-semibold text-emerald-600 flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                    <span>Production Shipped</span>
-                  </span>
-                </div>
-
-                <div className="flex justify-between border-b border-slate-100 pb-2.5">
-                  <span className="text-slate-500">Discipline</span>
-                  <span className="font-semibold text-slate-900 text-right">{project.type}</span>
-                </div>
-
-                {project.label && (
-                  <div className="flex justify-between border-b border-slate-100 pb-2.5">
-                    <span className="text-slate-500">Key Metric</span>
-                    <span className="font-semibold text-blue-600 text-right">{project.label}</span>
-                  </div>
-                )}
-
-                {project.year && (
-                  <div className="flex justify-between border-b border-slate-100 pb-2.5">
-                    <span className="text-slate-500">Year</span>
-                    <span className="font-semibold text-slate-900">{project.year}</span>
-                  </div>
-                )}
-              </div>
-
-              {project.link && (
-                <div className="pt-2">
-                  <a
-                    href={
-                      project.link.startsWith('http') ? project.link : `https://${project.link}`
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-3 text-xs font-bold text-white shadow-xs transition-all hover:bg-black hover:scale-[1.02]"
-                  >
-                    <span>Visit Live Project</span>
-                    <svg
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                    >
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                      <polyline points="15 3 21 3 21 9" />
-                      <line x1="10" y1="14" x2="21" y2="3" />
-                    </svg>
-                  </a>
-                </div>
-              )}
             </div>
           </div>
         </section>
-
-        {/* ========================================================== */}
-        {/* 3. ALIGNED IMAGES SHOWCASE                                 */}
-        {/* ========================================================== */}
-        <section aria-label="Visual Specimens Showcase" className="space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-200/80 pb-4">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900">
-              <span className="h-2 w-2 rounded-full bg-emerald-500" />
-              <span>Project Previews &amp; Visual Artifacts</span>
-            </div>
-            <span className="text-xs text-slate-500">
-              {mediaList.length > 0
-                ? `${mediaList.length} Image${mediaList.length > 1 ? 's' : ''}`
-                : 'Gallery'}
-            </span>
-          </div>
-
-          {/* Image Showcase Grid */}
-          {mediaList.length <= 1 ? (
-            /* Single Hero Image */
-            <div className="relative rounded-2xl border border-slate-200/80 bg-white p-3 shadow-md">
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-100">
-                {primaryImage ? (
-                  <Image
-                    src={primaryImage.url}
-                    alt={primaryImage.alt}
-                    fill
-                    priority
-                    sizes="(max-width: 1200px) 100vw, 1200px"
-                    className="object-cover object-top"
-                  />
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center bg-slate-50 p-8 text-center">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xs max-w-md">
-                      <h3 className="text-sm font-bold text-slate-900">
-                        {project.title} &bull; Interface Preview
-                      </h3>
-                      <p className="mt-1 text-xs text-slate-500">
-                        Upload media in Payload Admin under the image field to showcase visual
-                        assets here.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            /* Multi-Image Aligned Showcase */
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 items-stretch">
-              {/* Primary Image (7 Cols) */}
-              <div className="lg:col-span-7 flex flex-col">
-                <div className="relative h-full flex flex-col rounded-2xl border border-slate-200/80 bg-white p-3 shadow-md">
-                  <div className="relative min-h-[340px] sm:min-h-[420px] flex-1 w-full overflow-hidden rounded-xl bg-slate-100">
-                    {primaryImage && (
-                      <Image
-                        src={primaryImage.url}
-                        alt={primaryImage.alt}
-                        fill
-                        priority
-                        sizes="(max-width: 1024px) 100vw, 700px"
-                        className="object-cover object-top"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Secondary Companion Images (5 Cols) */}
-              <div className="lg:col-span-5 flex flex-col gap-6 justify-between">
-                {secondaryImages.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="relative flex-1 rounded-2xl border border-slate-200/80 bg-white p-2.5 shadow-xs transition-all hover:border-slate-400 hover:shadow-md flex flex-col"
-                  >
-                    <div className="relative min-h-[160px] flex-1 w-full overflow-hidden rounded-lg bg-slate-100">
-                      <Image
-                        src={img.url}
-                        alt={img.alt || `Preview ${idx + 2}`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 500px"
-                        className="object-cover object-top"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Remaining Images */}
-          {remainingImages.length > 0 && (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 pt-4">
-              {remainingImages.map((img, idx) => (
-                <div
-                  key={idx}
-                  className="relative rounded-2xl border border-slate-200/80 bg-white p-2.5 shadow-xs transition-all hover:border-slate-400 hover:shadow-md"
-                >
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-slate-100">
-                    <Image
-                      src={img.url}
-                      alt={img.alt || `Preview ${idx + 4}`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 600px"
-                      className="object-cover object-top"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* ========================================================== */}
-        {/* 4. FOOTER: CLEAN NAVIGATION                                */}
-        {/* ========================================================== */}
-        <footer className="mt-20 border-t border-slate-200/80 pt-10">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <Link
-              href="/demo/developer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800 hover:text-blue-600 transition-colors"
-            >
-              <span>&larr;</span>
-              <span>Back to Developer Overview</span>
-            </Link>
-
-            <Link
-              href="/demo/developer/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-black hover:scale-105"
-            >
-              <span>Get in Touch</span>
-              <span>&rarr;</span>
-            </Link>
-          </div>
-        </footer>
       </main>
     </div>
   )

@@ -5,9 +5,16 @@ import { draftMode } from 'next/headers'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import Page from './page.client'
 import { Experience, Education, LandingPage, Tool, Project } from '@/payload-types'
+import type { Metadata } from 'next'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
+
+export const metadata: Metadata = {
+  title: 'Portofolio | Feri Alfajri',
+  description:
+    'Full archive of production systems, distributed backends, and cloud infrastructure projects.',
+}
 
 export default async function HomePage() {
   const { isEnabled: isDraft } = await draftMode()

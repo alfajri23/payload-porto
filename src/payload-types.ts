@@ -580,8 +580,8 @@ export interface Project {
     [k: string]: unknown;
   };
   year?: number | null;
-  image: (number | Media)[];
-  link: string;
+  image?: (number | Media)[] | null;
+  link?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */

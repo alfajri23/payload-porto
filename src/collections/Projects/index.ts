@@ -83,13 +83,13 @@ export const Projects: CollectionConfig = {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
       hasMany: true,
     },
     {
       name: 'link',
       type: 'text',
-      required: true,
+      required: false,
     },
     slugField({
       position: undefined,
