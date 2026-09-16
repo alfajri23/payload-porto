@@ -10,6 +10,7 @@ import { ChevronDown, SearchIcon } from 'lucide-react'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItems = data?.navItems || []
+  console.log('HeaderNav data:', navItems) // Debugging line to check the structure of data
 
   return (
     <nav className="flex items-center gap-6">
@@ -60,7 +61,10 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           />
         )
       })}
-      <Link href="/search" className="p-1.5 rounded-full text-[#6E6D68] hover:text-[#0D99FF] hover:bg-[#EAE7E0]/60 transition-colors">
+      <Link
+        href="/search"
+        className="p-1.5 rounded-full text-[#6E6D68] hover:text-[#0D99FF] hover:bg-[#EAE7E0]/60 transition-colors"
+      >
         <span className="sr-only">Search</span>
         <SearchIcon className="w-4 h-4" />
       </Link>

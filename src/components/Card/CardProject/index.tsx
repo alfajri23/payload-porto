@@ -46,22 +46,18 @@ export const CardProject: React.FC<{
               {summaryLexicalContent(proj.description)}
             </p>
           )}
-
-          {proj.label && (
-            <div className="mt-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                <span className="truncate max-w-[240px]">{proj.label}</span>
-              </span>
-            </div>
-          )}
         </div>
       </div>
 
       <div className="mx-5 sm:mx-6 pb-5 sm:pb-6 pt-3 border-t border-slate-100 flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">
-          View Case Study
-        </span>
+        {proj.label && (
+          <div className="mt-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <span className="truncate max-w-[240px]">{proj.label}</span>
+            </span>
+          </div>
+        )}
         <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
           <svg
             className="h-3.5 w-3.5 transform group-hover:translate-x-0.5 transition-transform"

@@ -163,11 +163,8 @@ export default async function DeveloperProjectDetailPage({ params }: PageProps) 
                   if (typeof img === 'number' || !img) return null
 
                   return (
-                    <div>
-                      <div
-                        key={img.id || idx}
-                        className="relative rounded-2xl border border-slate-200/80 bg-white p-2.5 transition-all hover:border-slate-400 hover:shadow-md shadow-xl"
-                      >
+                    <div key={img.id || idx}>
+                      <div className="relative rounded-2xl border border-slate-200/80 bg-white p-2.5 transition-all hover:border-slate-400 hover:shadow-md shadow-xl">
                         <div className="relative w-full overflow-hidden rounded-lg bg-slate-100">
                           <ImageMedia
                             resource={img}
