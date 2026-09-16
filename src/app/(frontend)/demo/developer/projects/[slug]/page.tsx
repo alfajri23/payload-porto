@@ -136,7 +136,9 @@ export default async function DeveloperProjectDetailPage({ params }: PageProps) 
                 </span>
 
                 <Link
-                  href={project.link.startsWith('http') ? project.link : `https://${project.link}`}
+                  href={
+                    project?.link?.startsWith('http') ? project.link : `https://${project.link}`
+                  }
                   target="_blank"
                   rel="noreferrer"
                   className="font-bold text-blue-600 text-sm mt-1 inline-flex items-center gap-1 hover:underline"
@@ -155,7 +157,7 @@ export default async function DeveloperProjectDetailPage({ params }: PageProps) 
         <section className="bg-slate-50/50 py-10 sm:py-14 border-b border-slate-100">
           <div className="mx-auto max-w-6xl px-6 sm:px-12">
             {/* Remaining Images */}
-            {project.image.length > 0 && (
+            {project.image && project.image.length > 0 && (
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 pt-4">
                 {project.image.slice(1).map((img, idx) => (
                   <div

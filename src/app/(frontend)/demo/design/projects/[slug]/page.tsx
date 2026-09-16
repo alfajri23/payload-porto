@@ -4,9 +4,9 @@ import Image from 'next/image'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
-import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import RichText from '@/components/RichText'
+import { notFound } from 'next/navigation'
 
 type Args = {
   params: Promise<{
@@ -76,7 +76,7 @@ export default async function Project({ params: paramsPromise }: Args) {
 
   const project = await queryProjectBySlug(decodedSlug)
 
-  if (!project) return <PayloadRedirects url={url} />
+  if (!project) notFound()
 
   // Normalise uploaded images array
   const rawImages = Array.isArray(project.image)
@@ -104,7 +104,6 @@ export default async function Project({ params: paramsPromise }: Args) {
   return (
     <div className="min-h-screen bg-[#FBFBFB] text-slate-900 font-sans antialiased selection:bg-slate-200 selection:text-black pb-24">
       {draft && <LivePreviewListener />}
-      <PayloadRedirects disableNotFound url={url} />
 
       {/* ========================================================== */}
       {/* 1. TOP MINIMAL NAVIGATION BAR                              */}
