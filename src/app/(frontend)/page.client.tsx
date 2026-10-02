@@ -71,7 +71,7 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                 <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                   <a
                     href="#projects"
-                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-sky-700 px-6 text-sm font-semibold text-white transition-all hover:bg-black hover:scale-105 shadow-md"
+                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-amber-600 px-6 text-sm font-semibold text-white transition-all hover:bg-black hover:scale-105 shadow-md"
                   >
                     <span>Explore Projects</span>
                     <span className="text-xs">&darr;</span>
@@ -259,7 +259,7 @@ export default function Page({ landingPage, experience, education, tools }: Prop
               </div>
               <Link
                 href="/demo/developer/projects"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white hover:bg-black transition-all shadow-xs w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-700 px-4 py-2.5 text-xs font-semibold text-white hover:bg-black transition-all shadow-xs w-full sm:w-auto"
               >
                 <span>View Project Archive ({projects.length})</span>
                 <span className="text-sm">&rarr;</span>
@@ -303,7 +303,7 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                   {toolsList.map((tool) => (
                     <div
                       key={tool.name}
-                      className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-slate-800 shadow-2xs hover:border-slate-900 hover:shadow-xs transition-all cursor-default group"
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-400 bg-white px-3.5 py-1.5 sm:px-4 sm:py-2 text-xs font-semibold text-slate-800 shadow-2xs hover:border-slate-900 hover:shadow-xs transition-all cursor-default group"
                     >
                       <span className="shrink-0 transition-transform group-hover:scale-110">
                         {tool.icon && (
@@ -387,9 +387,9 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                 </div>
 
                 {/* Quick Consultation Callout */}
-                <div className="mt-6 rounded-2xl bg-[#111827] p-5 sm:p-6 text-white shadow-xs">
+                <div className="mt-6 rounded-2xl bg-amber-700 p-5 sm:p-6 text-white shadow-xs">
                   <h3 className="text-base font-bold">Have a systems bottleneck?</h3>
-                  <p className="mt-1.5 text-xs text-[#9CA3AF] leading-relaxed">
+                  <p className="mt-1.5 text-xs leading-relaxed">
                     Available for backend performance audits, architecture reviews, and staff
                     engineering contract engagements.
                   </p>

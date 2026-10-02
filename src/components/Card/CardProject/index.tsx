@@ -11,7 +11,7 @@ export const CardProject: React.FC<{
     <Link
       key={proj.id}
       href={`/projects/${proj.slug}`}
-      className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-slate-300"
+      className="group relative flex flex-col justify-between overflow-hidden rounded-md border border-stone-300 shadow-md transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-slate-300 bg-slate-50"
     >
       <div>
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 border-b border-slate-200/80">
