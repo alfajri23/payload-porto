@@ -7,6 +7,7 @@ import { Education, Experience, LandingPage, Project, Tool } from '@/payload-typ
 import { ImageMedia } from '@/components/Media/ImageMedia'
 import { summaryLexicalContent } from '@/utilities/extractLexical'
 import { CardProject } from '@/components/Card/CardProject'
+import { RichText } from 'node_modules/@payloadcms/richtext-lexical/dist/features/converters/lexicalToJSX/Component'
 
 type Props = {
   landingPage: LandingPage
@@ -70,13 +71,13 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                 <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                   <a
                     href="#projects"
-                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 text-sm font-semibold text-white transition-all hover:bg-black hover:scale-105 shadow-md"
+                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-sky-700 px-6 text-sm font-semibold text-white transition-all hover:bg-black hover:scale-105 shadow-md"
                   >
                     <span>Explore Projects</span>
                     <span className="text-xs">&darr;</span>
                   </a>
                   <Link
-                    href="/demo/developer/contact"
+                    href="/contact"
                     className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-900 hover:bg-slate-50"
                   >
                     Contact Me
@@ -116,11 +117,9 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                         <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-xs mt-0.5" />
                         <div>
                           <div className="text-[11px] sm:text-xs font-bold text-white leading-tight drop-shadow-md">
-                            Systems Design
+                            Creative
                           </div>
-                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm">
-                            Distributed Mesh
-                          </div>
+                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm"></div>
                         </div>
                       </div>
                     </div>
@@ -138,11 +137,9 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                         <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-xs mt-0.5" />
                         <div>
                           <div className="text-[11px] sm:text-xs font-bold text-white leading-tight drop-shadow-md">
-                            Low Latency
+                            Design
                           </div>
-                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm">
-                            p99 &lt; 4.2ms
-                          </div>
+                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm"></div>
                         </div>
                       </div>
                     </div>
@@ -160,11 +157,9 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                         <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-xs mt-0.5" />
                         <div>
                           <div className="text-[11px] sm:text-xs font-bold text-white leading-tight drop-shadow-md">
-                            High Availability
+                            Production
                           </div>
-                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm">
-                            99.99% Uptime
-                          </div>
+                          <div className="text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow-sm"></div>
                         </div>
                       </div>
                     </div>
@@ -212,7 +207,7 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                     </svg>
                   </div>
                   <div>
-                    <div className="text-xl font-bold tracking-tight text-slate-900">3+ yrs</div>
+                    <div className="text-xl font-bold tracking-tight text-slate-900">4+ yrs</div>
                     <div className="text-xs font-medium text-slate-500 leading-snug">
                       Engineering experience
                     </div>
@@ -255,11 +250,11 @@ export default function Page({ landingPage, experience, education, tools }: Prop
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pb-5 mb-8 border-b border-slate-100">
               <div>
-                <span className="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                <span className="inline-block rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-600">
                   Selected Work
                 </span>
                 <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                  Featured Projects
+                  My Portfolio
                 </h2>
               </div>
               <Link
@@ -293,7 +288,7 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                   Core Capabilities
                 </span>
                 <h2 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
-                  Specialized Tools &amp; Infrastructure
+                  Tools &amp; Technologies
                 </h2>
               </div>
               <p className="mt-2 sm:mt-0 text-xs sm:text-sm text-slate-500">
@@ -358,9 +353,12 @@ export default function Page({ landingPage, experience, education, tools }: Prop
                       <span className="text-xs font-bold text-slate-500">{job.period}</span>
                       <h3 className="text-base font-bold text-slate-900 mt-0.5">{job.role}</h3>
                       <div className="text-xs font-semibold text-slate-600">{job.company}</div>
-                      <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+                      {/* <p className="mt-2 text-sm text-slate-600 leading-relaxed">
                         {summaryLexicalContent(job.desc)}
-                      </p>
+                      </p> */}
+                      <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed prose-headings:font-bold prose-headings:text-slate-900 prose-h2:text-xs prose-h3:text-xs prose-p:text-xs sm:prose-p:text-xs prose-p:leading-relaxed prose-li:text-sm sm:prose-li:text-xs prose-a:text-blue-600 prose-a:underline hover:prose-a:text-blue-700">
+                        <RichText data={job.desc} />
+                      </div>
                     </div>
                   ))}
                 </div>

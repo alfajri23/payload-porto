@@ -61,19 +61,19 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           />
         )
       })}
-      <Link
+      {/* <Link
         href="/search"
         className="p-1.5 rounded-full text-[#6E6D68] hover:text-[#0D99FF] hover:bg-[#EAE7E0]/60 transition-colors"
       >
         <span className="sr-only">Search</span>
         <SearchIcon className="w-4 h-4" />
-      </Link>
-      <a
-        href="#contact"
+      </Link> */}
+      <Link
+        href="/contact"
         className="hidden sm:inline-flex min-h-[38px] items-center justify-center rounded-full bg-[#121212] px-4 py-1.5 text-xs font-semibold text-white shadow-xs transition-all hover:bg-[#0D99FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D99FF]"
       >
         Contact
-      </a>
+      </Link>
     </nav>
   )
 }

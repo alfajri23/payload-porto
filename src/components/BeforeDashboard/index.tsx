@@ -1,67 +1,120 @@
-import { Banner } from '@payloadcms/ui/elements/Banner'
 import React from 'react'
-
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { TrafficChart } from './TrafficChart'
 import { SeedButton } from './SeedButton'
 import './index.scss'
 
-const baseClass = 'before-dashboard'
+export const BeforeDashboard: React.FC = async () => {
+  const payload = await getPayload({ config })
 
-const BeforeDashboard: React.FC = () => {
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29)
+  thirtyDaysAgo.setHours(0, 0, 0, 0)
+
+  const [visitsCount, promoCount, monthlyViewsDoc, projectsCount, postsCount] =
+    await Promise.all([
+      payload.count({ collection: 'page-views' }).catch(() => ({ totalDocs: 0 })),
+      payload
+        .count({
+          collection: 'page-views',
+          where: {
+            referrer: {
+              not_equals: 'Direct',
+            },
+          },
+        })
+        .catch(() => ({ totalDocs: 0 })),
+      payload
+        .find({
+          collection: 'page-views',
+          where: {
+            createdAt: {
+              greater_than_equal: thirtyDaysAgo.toISOString(),
+            },
+          },
+          limit: 1000,
+          pagination: false,
+          sort: 'createdAt',
+        })
+        .catch(() => ({ docs: [] })),
+      payload.count({ collection: 'projects' as any }).catch(() => ({ totalDocs: 0 })),
+      payload.count({ collection: 'posts' as any }).catch(() => ({ totalDocs: 0 })),
+    ])
+
+  const totalVisits = visitsCount.totalDocs
+  const promoVisits = promoCount.totalDocs
+  const totalProjects = projectsCount.totalDocs
+  const totalPosts = postsCount.totalDocs
+
+  const trafficData = (monthlyViewsDoc.docs || []).map((doc: any) => ({
+    createdAt:
+      typeof doc.createdAt === 'string' ? doc.createdAt : new Date(doc.createdAt).toISOString(),
+    device: doc.device || null,
+    referrer: doc.referrer || null,
+  }))
+
   return (
-    <div className={baseClass}>
-      <Banner className={`${baseClass}__banner`} type="success">
-        <h4>Welcome to your dashboard!</h4>
-      </Banner>
-      Here&apos;s what to do next:
-      <ul className={`${baseClass}__instructions`}>
-        <li>
+    <div className="custom-admin-dashboard">
+      <div className="custom-admin-dashboard__header">
+        <div>
+          <h2 className="custom-admin-dashboard__title">Ringkasan Website & Analitik</h2>
+          <p className="custom-admin-dashboard__subtitle">
+            Pantau metrik kunjungan website tiket dan aktivitas pengunjung secara real-time.
+          </p>
+        </div>
+        <div className="custom-admin-dashboard__actions">
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="custom-admin-dashboard__link-button"
+          >
+            ↗ Kunjungi Web
+          </a>
           <SeedButton />
-          {' with a few pages, posts, and projects to jump-start your new site, then '}
-          <a href="/" target="_blank">
-            visit your website
-          </a>
-          {' to see the results.'}
-        </li>
-        <li>
-          {'Modify your '}
-          <a
-            href="https://payloadcms.com/docs/configuration/collections"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            collections
-          </a>
-          {' and add more '}
-          <a
-            href="https://payloadcms.com/docs/fields/overview"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            fields
-          </a>
-          {' as needed. If you are new to Payload, we also recommend you check out the '}
-          <a
-            href="https://payloadcms.com/docs/getting-started/what-is-payload"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Getting Started
-          </a>
-          {' docs.'}
-        </li>
-        <li>
-          Commit and push your changes to the repository to trigger a redeployment of your project.
-        </li>
-      </ul>
-      {'Pro Tip: This block is a '}
-      <a
-        href="https://payloadcms.com/docs/custom-components/overview"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        custom component
-      </a>
-      , you can remove it at any time by updating your <strong>payload.config</strong>.
+        </div>
+      </div>
+
+      <div className="custom-admin-dashboard__grid">
+        <div className="custom-admin-dashboard__card">
+          <div className="custom-admin-dashboard__card-header">
+            <span className="custom-admin-dashboard__card-label">Total Pengunjung</span>
+            <span className="custom-admin-dashboard__card-icon">👥</span>
+          </div>
+          <div className="custom-admin-dashboard__card-value">{totalVisits}</div>
+          <div className="custom-admin-dashboard__card-desc">Sesi unik landing tercatat</div>
+        </div>
+
+        <div className="custom-admin-dashboard__card">
+          <div className="custom-admin-dashboard__card-header">
+            <span className="custom-admin-dashboard__card-label">Kunjungan Promo (?ref=)</span>
+            <span className="custom-admin-dashboard__card-icon">🏷️</span>
+          </div>
+          <div className="custom-admin-dashboard__card-value">{promoVisits}</div>
+          <div className="custom-admin-dashboard__card-desc">Dari link sosmed & referral</div>
+        </div>
+
+        <div className="custom-admin-dashboard__card">
+          <div className="custom-admin-dashboard__card-header">
+            <span className="custom-admin-dashboard__card-label">Total Proyek / Tiket</span>
+            <span className="custom-admin-dashboard__card-icon">🎟️</span>
+          </div>
+          <div className="custom-admin-dashboard__card-value">{totalProjects}</div>
+          <div className="custom-admin-dashboard__card-desc">Katalog aktif terdaftar</div>
+        </div>
+
+        <div className="custom-admin-dashboard__card">
+          <div className="custom-admin-dashboard__card-header">
+            <span className="custom-admin-dashboard__card-label">Total Artikel / Posts</span>
+            <span className="custom-admin-dashboard__card-icon">📝</span>
+          </div>
+          <div className="custom-admin-dashboard__card-value">{totalPosts}</div>
+          <div className="custom-admin-dashboard__card-desc">Konten terbit</div>
+        </div>
+      </div>
+
+      <TrafficChart initialData={trafficData} />
     </div>
   )
 }

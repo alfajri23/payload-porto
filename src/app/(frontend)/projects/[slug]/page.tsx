@@ -88,14 +88,11 @@ export default async function DeveloperProjectDetailPage({ params }: PageProps) 
           <div className="mx-auto max-w-7xl px-6 sm:px-12 lg:px-16 xl:px-20">
             {/* Breadcrumbs */}
             <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mb-6">
-              <Link href="/demo/developer" className="hover:text-slate-900 transition-colors">
+              <Link href="/" className="hover:text-slate-900 transition-colors">
                 Overview
               </Link>
               <span>/</span>
-              <Link
-                href="/demo/developer/projects"
-                className="hover:text-slate-900 transition-colors"
-              >
+              <Link href="/projects" className="hover:text-slate-900 transition-colors">
                 Projects
               </Link>
               <span>/</span>

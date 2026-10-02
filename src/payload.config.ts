@@ -15,6 +15,7 @@ import { Projects } from './collections/Projects'
 import { Experiences } from './collections/Experiences'
 import { Educations } from './collections/Educations'
 import { Tools } from './collections/Tools'
+import { PageViews } from './collections/PageViews'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
@@ -69,7 +70,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Projects, Experiences, Educations, Tools],
+  collections: [Pages, Posts, Media, Categories, Users, Projects, Experiences, Educations, Tools, PageViews],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, LandingPage],
   plugins: [

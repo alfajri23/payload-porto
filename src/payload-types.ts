@@ -76,6 +76,7 @@ export interface Config {
     experiences: Experience;
     educations: Education;
     tools: Tool;
+    'page-views': PageView;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -98,6 +99,7 @@ export interface Config {
     experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
     educations: EducationsSelect<false> | EducationsSelect<true>;
     tools: ToolsSelect<false> | ToolsSelect<true>;
+    'page-views': PageViewsSelect<false> | PageViewsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -645,6 +647,30 @@ export interface Tool {
   createdAt: string;
 }
 /**
+ * Catatan analitik kunjungan website (First-Party).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-views".
+ */
+export interface PageView {
+  id: number;
+  /**
+   * Halaman tempat pengunjung pertama kali mendarat
+   */
+  path: string;
+  /**
+   * Sumber asal (dari ?ref=, ?utm_source=, atau hostname browser)
+   */
+  referrer?: string | null;
+  device: 'mobile' | 'tablet' | 'desktop';
+  /**
+   * ID sesi unik anonim pengunjung
+   */
+  sessionId: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -795,6 +821,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tools';
         value: number | Tool;
+      } | null)
+    | ({
+        relationTo: 'page-views';
+        value: number | PageView;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -1148,6 +1178,18 @@ export interface ToolsSelect<T extends boolean = true> {
   color?: T;
   icon?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-views_select".
+ */
+export interface PageViewsSelect<T extends boolean = true> {
+  path?: T;
+  referrer?: T;
+  device?: T;
+  sessionId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
