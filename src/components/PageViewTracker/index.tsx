@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 function getDeviceType(): 'mobile' | 'tablet' | 'desktop' {
@@ -22,7 +22,7 @@ function getOrCreateSessionId(): string {
   return id
 }
 
-export function PageViewTracker() {
+function TrackerContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const lastPathRef = useRef<string | null>(null)
@@ -65,4 +65,12 @@ export function PageViewTracker() {
   }, [pathname, searchParams])
 
   return null
+}
+
+export function PageViewTracker() {
+  return (
+    <Suspense fallback={null}>
+      <TrackerContent />
+    </Suspense>
+  )
 }
